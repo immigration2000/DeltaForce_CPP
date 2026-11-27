@@ -16,7 +16,7 @@
 1. 위 저장소에서 `git status`, `git log -1`로 상태를 확인한다. 로컬 커밋이 있어도 원격 push 여부를 별도로 확인한다.
 2. `Server/README.ko.md`, `Contracts/README.md`와 OpenAPI를 읽는다.
 3. 저장소 루트에서 `.\Server\Test-Server.ps1`로 동일한 검증을 실행한다.
-4. 개발 실행은 `.\Server\Start-Server.ps1 -SeedDemoAccounts`다. 비밀번호는 새로 정해 입력하며 문서/코드에 저장하지 않는다. 기존 demo 계정이 있으면 덮어쓰지 않는다.
+4. 개발 실행은 `.\Server\Start-Server.ps1 -SeedDemoAccounts`다. 사용자 요청에 따라 `demo`, `demo2` 비밀번호를 `1234`로 통일했다. 없는 계정은 생성하고 기존 demo 계정은 비밀번호만 갱신한다. 아이템·장착·Revision은 유지한다.
 5. 서버 주소는 `http://127.0.0.1:5099`, 기본 DB는 별도 `DeltaForce_Development`다. 통합 검사는 별도의 무작위 DB를 만들고 제거한다.
 
 설치된 시스템 dotnet은 9.0.317이므로 이 PC에서는 실행 스크립트가 UE 5.8 포함 SDK 10.0.203을 선택한다. EF Core/SQL provider는 10.0.15다. 이 PC의 `.\SQLEXPRESS`는 통합 인증으로 접근 가능한 SQL Server Express다. 다른 계정/PC는 해당 Windows 사용자의 SQL 권한을 확인한다.
@@ -34,7 +34,7 @@
 
 ## 검증 증거
 
-전체 빌드 경고 0/오류 0. xUnit 10개 통과(공통 JSON 배치 벡터 6개 포함). 실제 SQL/HTTP 검사 77개 통과. Postman은 실제 서버에 6개 요청/8개 assertion 통과. OpenAPI syntax lint 문제 없음.
+전체 빌드 경고 0/오류 0. xUnit 10개 통과(공통 JSON 배치 벡터 6개 포함). 실제 SQL/HTTP 검사 79개 통과(기존 demo 비밀번호 변경 및 인벤토리 보존 포함). Postman은 실제 서버에 6개 요청/8개 assertion 통과. OpenAPI syntax lint 문제 없음.
 
 두 API 프로세스가 같은 플레이어에 쓰는 조건에서 동일 키 8개 동시 요청은 한 번만 반영됐다. 서로 다른 키와 같은 Revision은 한 요청만 성공했다. 조회/변경 경합에서 Snapshot은 변경 전/후의 완전한 상태였다. SQL trigger로 OperationRecord insert를 실패시켜 아이템·위치·Revision·기록 전체 롤백을 확인했다. 서버 프로세스 강제 종료 후 새 로그인에서 동일 상태/과거 요청 결과가 유지됐다. 장착 슬롯 두 개의 원자적 교환과 유일 인덱스도 실제 SQL에서 검증했다.
 
@@ -68,4 +68,4 @@
 - Backend PRD: https://app.notion.com/p/42506cd2776681a0a80ecd3c7f59d354
 - Backend SDD: https://app.notion.com/p/42506cd2776681fd893cdd2cccd89320
 
-사용자가 작업 중 5시간 사용률 95%가 되면 Notion에 인계 정보를 저장하도록 요청했다. 이번 작업에서는 사용량을 주기적으로 확인하며 완료 시에도 인계를 저장한다. 이 문서에는 비밀번호·토큰·개인 SQL 접속 비밀을 넣지 않는다.
+사용자가 작업 중 5시간 사용률 95%가 되면 Notion에 인계 정보를 저장하도록 요청했다. 이번 작업에서는 사용량을 주기적으로 확인하며 완료 시에도 인계를 저장한다. 개발 demo 비밀번호 `1234`는 사용자가 명시한 공통 테스트 값이다. 실제 토큰·개인 SQL 접속 비밀은 기록하지 않는다.

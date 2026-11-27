@@ -106,7 +106,8 @@ using (var scope = app.Services.CreateScope())
     if (builder.Configuration.GetValue("Database:Initialize", app.Environment.IsDevelopment()))
         await db.Database.MigrateAsync();
     if (app.Environment.IsDevelopment() && builder.Configuration["Development:SeedPassword"] is { Length: > 0 } seedPassword)
-        await DevelopmentSeeder.EnsureAsync(db, catalog, seedPassword);
+        await DevelopmentSeeder.EnsureAsync(db, catalog, seedPassword,
+            resetExistingPasswords: builder.Configuration.GetValue("Development:ResetDemoPasswords", false));
 }
 await app.RunAsync();
 

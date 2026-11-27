@@ -8,6 +8,8 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using DeltaForce.Application;
 using DeltaForce.Domain;
+using DeltaForce.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 
 if (args.Length < 2) throw new ArgumentException("Usage: IntegrationChecks <dotnet.exe> <Api.dll> [--keep-database]");
@@ -19,7 +21,7 @@ var sql = new SqlConnectionStringBuilder(Environment.GetEnvironmentVariable("DEL
 string masterConnection = sql.ConnectionString;
 sql.InitialCatalog = database;
 string connection = sql.ConnectionString;
-string password = Guid.NewGuid().ToString("N") + "!Test";
+string password = "1234";
 int firstPort = FreePort(), secondPort = FreePort();
 var processes = new List<Process>();
 var logs = new System.Collections.Concurrent.ConcurrentQueue<string>();
@@ -164,9 +166,21 @@ try
     Expect(afterEquipmentSwap.Slots.Single(s => s.SlotTag == "Slot.Backpack").ItemId == bag, "equipment state survives unrelated commands");
     var persisted = await Snapshot(a);
     await Stop(second); await Stop(first);
-    first = await Start(firstPort, false);
+    await using (var passwordConnection = new SqlConnection(connection))
+    {
+        await passwordConnection.OpenAsync();
+        var oldHash = new PasswordHasher<PlayerRow>().HashPassword(new PlayerRow(), "previous-demo-password");
+        await using var resetFixture = new SqlCommand("UPDATE [Players] SET [PasswordHash] = @hash WHERE [UserId] IN (N'demo', N'demo2')", passwordConnection);
+        resetFixture.Parameters.AddWithValue("@hash", oldHash);
+        await resetFixture.ExecuteNonQueryAsync();
+    }
+    first = await Start(firstPort, true, resetPasswords: true);
     Expect((int)(await a.GetAsync("/api/v1/inventory")).StatusCode == 401, "API restart expires in-memory sessions");
     using var restored = await Login(firstPort, "demo");
+    using var restoredOther = await Login(firstPort, "demo2");
+    Expect(Same(other, await Snapshot(restoredOther)), "demo2 password reset preserves its inventory and revision");
+    var oldPasswordLogin = await anonymous.PostAsJsonAsync("/api/v1/auth/login", new LoginRequest("demo", "previous-demo-password"), ContractJson.Options);
+    Expect((int)oldPasswordLogin.StatusCode == 401, "previous demo password rejected after explicit reset to 1234");
     Expect(Same(persisted, await Snapshot(restored)), "API process restart and re-login restore exact inventory");
     var durableReplay = await Execute(restored, firstMove, 200);
     Expect(Same(durableReplay.Result, firstResponse.Result), "request results survive API process restart");
@@ -240,7 +254,7 @@ async Task<OperationResponse> Change(Guid id, InventoryLocation destination, Ope
     using var client = await Login(firstPort, "demo");
     return await Execute(client, Command(await Snapshot(client), id, destination, operation), 200);
 }
-async Task<Process> Start(int port, bool initialize)
+async Task<Process> Start(int port, bool initialize, bool resetPasswords = false)
 {
     var info = new ProcessStartInfo(dotnet) { WorkingDirectory = Path.GetDirectoryName(apiDll)!,
         UseShellExecute = false, CreateNoWindow = true, RedirectStandardOutput = true, RedirectStandardError = true };
@@ -249,6 +263,7 @@ async Task<Process> Start(int port, bool initialize)
     info.Environment["ConnectionStrings__Inventory"] = connection;
     info.Environment["Database__Initialize"] = initialize ? "true" : "false";
     info.Environment["Development__SeedPassword"] = initialize ? password : "";
+    info.Environment["Development__ResetDemoPasswords"] = resetPasswords ? "true" : "false";
     var process = new Process { StartInfo = info };
     process.OutputDataReceived += (_, e) => { if (e.Data != null) logs.Enqueue(e.Data); };
     process.ErrorDataReceived += (_, e) => { if (e.Data != null) logs.Enqueue(e.Data); };

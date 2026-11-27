@@ -9,19 +9,15 @@ $ErrorActionPreference = 'Stop'
 $dotnet = Resolve-ServerDotNet -DotNetPath $DotNetPath
 $previousEnvironment = $env:ASPNETCORE_ENVIRONMENT
 $previousSeed = $env:Development__SeedPassword
+$previousReset = $env:Development__ResetDemoPasswords
 $previousConnection = $env:ConnectionStrings__Inventory
 Push-Location -LiteralPath $PSScriptRoot
 try {
     $env:ASPNETCORE_ENVIRONMENT = 'Development'
     if ($ConnectionString) { $env:ConnectionStrings__Inventory = $ConnectionString }
     if ($SeedDemoAccounts) {
-        $securePassword = Read-Host 'Password for NEW demo/demo2 accounts (12-128 characters)' -AsSecureString
-        $passwordPointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($securePassword)
-        try { $seedPassword = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($passwordPointer) }
-        finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($passwordPointer) }
-        if ($seedPassword.Length -lt 12 -or $seedPassword.Length -gt 128) { throw 'Use a password with 12-128 characters.' }
-        $env:Development__SeedPassword = $seedPassword
-        $seedPassword = $null
+        $env:Development__SeedPassword = '1234'
+        $env:Development__ResetDemoPasswords = 'true'
     }
     & $dotnet run --project (Join-Path $PSScriptRoot 'src\DeltaForce.Api') --no-launch-profile -- --urls $Urls
     if ($LASTEXITCODE -ne 0) { throw "Server exited with code $LASTEXITCODE" }
@@ -29,6 +25,7 @@ try {
 finally {
     $env:ASPNETCORE_ENVIRONMENT = $previousEnvironment
     $env:Development__SeedPassword = $previousSeed
+    $env:Development__ResetDemoPasswords = $previousReset
     $env:ConnectionStrings__Inventory = $previousConnection
     Pop-Location
 }

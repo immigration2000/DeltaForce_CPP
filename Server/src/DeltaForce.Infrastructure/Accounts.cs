@@ -20,15 +20,28 @@ public sealed class AccountService(InventoryDbContext db, PasswordHasher<PlayerR
 
 public static class DevelopmentSeeder
 {
-    public static async Task EnsureAsync(InventoryDbContext db, DefinitionCatalog catalog, string password, CancellationToken ct = default)
+    public static async Task EnsureAsync(InventoryDbContext db, DefinitionCatalog catalog, string password,
+        CancellationToken ct = default, bool resetExistingPasswords = false)
     {
-        if (password.Length < 12) throw new InvalidOperationException("Development seed password needs at least 12 characters");
+        if (string.IsNullOrEmpty(password) || password.Length > 128)
+            throw new InvalidOperationException("Development seed password needs 1-128 characters");
+        var hasher = new PasswordHasher<PlayerRow>();
         foreach (string userId in new[] { "demo", "demo2" })
         {
-            if (await db.Players.AnyAsync(p => p.UserId == userId, ct)) continue;
+            var existing = await db.Players.SingleOrDefaultAsync(p => p.UserId == userId, ct);
+            if (existing != null)
+            {
+                if (resetExistingPasswords && hasher.VerifyHashedPassword(existing, existing.PasswordHash, password)
+                    == PasswordVerificationResult.Failed)
+                {
+                    existing.PasswordHash = hasher.HashPassword(existing, password);
+                    await db.SaveChangesAsync(ct);
+                }
+                continue;
+            }
             await using var transaction = await db.Database.BeginTransactionAsync(ct);
             var player = new PlayerRow { PlayerId = Guid.NewGuid(), UserId = userId };
-            player.PasswordHash = new PasswordHasher<PlayerRow>().HashPassword(player, password);
+            player.PasswordHash = hasher.HashPassword(player, password);
             db.Players.Add(player);
             await db.SaveChangesAsync(ct);
             Guid stashId = Guid.NewGuid(), bagId = Guid.NewGuid();

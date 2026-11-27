@@ -8,8 +8,8 @@
 - 원격: `https://github.com/immigration2000/DeltaForce_CPP`
 - 작업 브랜치: `codex/server-lobby-mvp`
 - 기존 UE의 Source/Content는 수정하지 않았다. 별도 Server 솔루션과 Contracts를 추가했다.
-- 기존 `Grid-based-Inventory-System`은 정의 JSON을 읽기만 했다. 기존 코드/DB를 수정하거나 기존 PlayerJson을 가져오지 않았다.
-- 서버 API와 DB 기준으로 M1을 구현했다. 실제 UE 로그인 화면·ItemManager와 연결하는 작업은 남아 있다.
+- 기존 PlayerJson과 원래 서버 DB는 이관/수정하지 않았다. 기능 클라이언트 `Grid-based-Inventory-System`에는 v1 로그인·Snapshot 변환 및 매칭 C++ 함수를 추가했다.
+- 서버 API와 DB 기준으로 M1과 매칭 Reserved 단계를 구현했다. 실제 로그인 진입은 사용자 확인을 받았으며, 매칭 함수의 HTTP 흐름도 UE 자동화로 검증했다. WBP 버튼/이벤트 연결은 `Matching.ko.md`를 참조한다.
 
 ## 바로 이어받는 방법
 
@@ -53,13 +53,24 @@
 
 ## 다음 작업
 
-1. UE C++ HTTP transport와 v1 DTO를 만들고 BaseGI에는 세션만 유지한다.
+1. 기능 클라이언트 WBP_Ready_1의 OnClickedReady를 StartMatching/CancelMatching에 연결하고, OnMatchingStateChanged로 로비 표시를 갱신한다. 현재 FlipFlop은 애니메이션만 바꾸는 상태다.
 2. Client ItemManager에 Snapshot/Delta/Revision 적용, Pending·오류·재동기화 경로를 붙인다. 서버 확정 전 로컬 상태를 영구 상태로 저장하지 않는다.
 3. 공통 벡터를 UE C++ 테스트에서도 실행하고 실제 로비 화면에서 로그인·이동·장착·재로그인을 검증한다.
 4. 레이드 도입 전 custody/escrow/claim, ActiveEntry, 서버 신원/epoch, 티켓과 정산 스키마를 추가한다. 현재 플레이어 복합 FK의 소유권 이전 방식도 설계한다.
 5. 원본 PlayerJson 이관이 필요하면 별도 importer·백업·동등성 검증을 설계한다.
 
 레이드 입장/정산·서버 간 인증·결과 outbox·사망 보호·반환 holding은 미구현이다. 해당 정책은 기존 Notion 공통 계약과 Backend SDD를 기준으로 후속 결정한다. API를 다중 인스턴스로 배포하려면 세션 공유/라우팅, DB migration 운영, HTTPS 및 공개 계정 발급 정책도 추가한다.
+
+## 매칭 Reserved 추가 완료
+
+- API v1.1.0: 예약 생성, 취소, 본인 현재 예약/개별 예약/요청 결과 조회. MapId는 beacon.
+- RaidEntries/RaidRequestRecords migration을 추가하고 실제 개발 DB에 적용했다. Reserved는 장비 잠금 전 단계이며 인벤토리·Revision을 바꾸지 않는다.
+- 중복/경쟁/타인 접근/과거 취소/rollback/재시작 복구를 포함하여 SQL/HTTP 128개, Postman 12개 통과. 기존 도메인 10개도 통과. 모델과 Migration 차이 없음, OpenAPI syntax lint 문제 없음.
+- UE 에디터 모듈 빌드 통과. 헤드리스 GridInventory.Network 5개 통과(실제 HTTP MatchingLive 포함). 보고서: `C:\Users\user1\AppData\Local\Temp\codex-deltaforce-matching-20261127\native-tests\report`, 로그: 같은 폴더의 matching.log.
+- 활성 에디터 DLL을 덮어쓰지 않도록 모듈 suffix 4660으로 빌드했으며 Binaries/Win64/UnrealEditor.modules가 해당 빌드를 가리킨다. 실행 중인 에디터는 재시작해야 새 노드/구조체가 반영된다.
+- 기능 클라이언트는 main 브랜치의 기존 사용자 변경과 함께 작업 트리에 남아 있다. 이번 작업에서 Blueprint 바이너리는 편집하지 않았다. 전체 git add/commit/reset을 하지 말고 변경을 구분한다.
+- 개발 API는 127.0.0.1:5099에서 관리형 background 실행 중이다. PID와 로그는 Server/artifacts에 있으며 Stop-Server.ps1로 종료한다. demo/demo2 비밀번호는 1234.
+- 실제 DS 배정·입장 commit·티켓·ClientTravel은 후속이다. 현재 자동 Matched 전환은 없다.
 
 ## 기획 기준
 

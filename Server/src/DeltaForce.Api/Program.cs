@@ -32,6 +32,8 @@ builder.Services.AddDbContext<InventoryDbContext>(o => o.UseSqlServer(
     builder.Configuration.GetConnectionString("Inventory") ?? throw new InvalidOperationException("Inventory connection is required")));
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddSingleton(new RaidMaps(builder.Configuration.GetSection("Raid:MapIds").Get<string[]>() ?? ["beacon"]));
+builder.Services.AddScoped<IRaidReservationService, RaidReservationService>();
 builder.Services.AddSingleton<PasswordHasher<PlayerRow>>();
 builder.Services.AddSingleton<SessionStore>();
 builder.Services.AddAuthentication("Session").AddScheme<AuthenticationSchemeOptions, SessionAuthenticationHandler>("Session", _ => { });
@@ -67,6 +69,7 @@ app.MapGet("/health/ready", async (InventoryDbContext db, CancellationToken ct) 
 });
 app.MapGet("/openapi/v1.json", () => Results.File(Path.Combine(AppContext.BaseDirectory, "Contracts", "backend.v1.json"), "application/json"));
 var api = app.MapGroup("/api/v1");
+api.MapRaidReservations();
 api.MapPost("/auth/login", async (LoginRequest request, IAccountService accounts, SessionStore sessions, CancellationToken ct) =>
 {
     if (string.IsNullOrWhiteSpace(request.UserId) || request.UserId.Length > 64 || string.IsNullOrEmpty(request.Password) || request.Password.Length > 128)

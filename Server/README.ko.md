@@ -24,6 +24,8 @@ UE를 실행하지 않고 로그인 → 창고 조회 → 이동/장착 → 즉�
 
 ## API
 
+매칭 시작·취소와 기능 클라이언트 노드 연결은 [Matching.ko.md](Matching.ko.md)를 참조한다. 예약 API는 `/api/v1/raids/*`에 추가됐으며 API 계약 버전은 1.1.0이다.
+
 | 메서드 | 경로 | 용도 |
 | --- | --- | --- |
 | POST | `/api/v1/auth/login` | `{userId,password}` → playerId, token, expiresAt |

@@ -85,6 +85,139 @@
       ]
     },
     {
+      "name": "Reserve raid",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/v1/raids/reservations",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"requestId\": \"{{matchRequestId}}\", \"mapId\": \"beacon\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set(\"matchRequestId\", pm.variables.replaceIn(\"{{$guid}}\"));",
+              "pm.collectionVariables.set(\"cancelRequestId\", pm.variables.replaceIn(\"{{$guid}}\"));"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"reservation accepted\", () => { pm.response.to.have.status(201); pm.expect(pm.response.json().status).to.eql(\"Reserved\"); });",
+              "pm.collectionVariables.set(\"raidId\", pm.response.json().raidId); pm.collectionVariables.set(\"entryId\", pm.response.json().entryId);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Current raid entry",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/raids/current-entry",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"own reservation recovered\", () => { pm.response.to.have.status(200); pm.expect(pm.response.json().entryId).to.eql(pm.collectionVariables.get(\"entryId\")); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cancel raid",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/v1/raids/{{raidId}}/entry/cancel",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"requestId\": \"{{cancelRequestId}}\", \"entryId\": \"{{entryId}}\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"reservation cancelled\", () => { pm.response.to.have.status(200); pm.expect(pm.response.json().status).to.eql(\"Cancelled\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cancelled entry not active",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/raids/current-entry",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"no active reservation after cancellation\", () => pm.response.to.have.status(404));"
+            ]
+          }
+        }
+      ]
+    },
+    {
       "name": "Anonymous denied",
       "request": {
         "method": "GET",

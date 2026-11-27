@@ -80,7 +80,29 @@ paths = {
             **{str(code): response({"oneOf": [ref("OperationResult"), ref("ApiError")]}, "Stored rejection or lookup error") for code in (400, 403, 404, 409, 422)},
             "401": errors["401"], "503": errors["503"]}}},
 }
-spec = {"openapi": "3.0.3", "info": {"title": "DeltaForce Backend", "version": "1.0.0",
+schemas["ReserveRaidRequest"] = obj({"requestId": guid, "mapId": {**string, "minLength": 1, "maxLength": 64}})
+schemas["CancelRaidRequest"] = obj({"requestId": guid, "entryId": guid})
+schemas["RaidReservation"] = obj({"raidId": guid, "entryId": guid, "mapId": string,
+    "status": {"type": "string", "enum": ["Reserved", "Cancelled"]}, "createdAt": {"type": "string", "format": "date-time"}})
+raid_responses = {"200": response(ref("RaidReservation"), "Current reservation or stored result"),
+    "400": errors["400"], "401": errors["401"], "404": response(ref("ApiError"), "Entry/result not found for this player"),
+    "409": response(ref("ApiError"), "AlreadyMatching, RequestPayloadMismatch or EntryNotCancelable"), "503": errors["503"]}
+paths["/api/v1/raids/reservations"] = {"post": {"operationId": "reserveRaid",
+    "description": "Create one durable Reserved entry per player. This is matchmaking acceptance, not a ready dedicated server. No inventory lock or revision change occurs until the future entry commit stage. Reuse the same requestId after timeout. Replays return the original historical result; query current-entry for current state.",
+    "requestBody": {"required": True, "content": {"application/json": {"schema": ref("ReserveRaidRequest")}}},
+    "responses": {**{k:v for k,v in raid_responses.items() if k != "200"}, "201": response(ref("RaidReservation"), "Reserved or exact replay")}}}
+paths["/api/v1/raids/current-entry"] = {"get": {"operationId": "currentRaidEntry", "responses": raid_responses}}
+paths["/api/v1/raids/{raidId}/entry"] = {"get": {"operationId": "raidEntry",
+    "parameters": [{"name": "raidId", "in": "path", "required": True, "schema": guid}], "responses": raid_responses}}
+paths["/api/v1/raids/{raidId}/entry/cancel"] = {"post": {"operationId": "cancelRaidEntry",
+    "description": "Cancel only the authenticated player's specified Reserved entry. Same-key retries replay; cancelling an already Cancelled entry also succeeds. Does not touch another/newer reservation.",
+    "parameters": [{"name": "raidId", "in": "path", "required": True, "schema": guid}],
+    "requestBody": {"required": True, "content": {"application/json": {"schema": ref("CancelRaidRequest")}}}, "responses": raid_responses}}
+paths["/api/v1/raids/requests/{requestId}"] = {"get": {"operationId": "raidRequestResult",
+    "description": "Replay the original response/status for this player+requestId. A 404 RequestNotRecorded does not prove an in-flight request failed.",
+    "parameters": [{"name": "requestId", "in": "path", "required": True, "schema": guid}],
+    "responses": {**raid_responses, "201": response(ref("RaidReservation"), "Stored reservation result")}}}
+spec = {"openapi": "3.0.3", "info": {"title": "DeltaForce Backend", "version": "1.1.0",
     "description": "M1 authoritative lobby backend. Contracts/README.md contains integration rules and boundaries."},
     "servers": [{"url": "http://127.0.0.1:5099"}], "security": [{"Session": []}], "paths": paths,
     "components": {"securitySchemes": {"Session": {"type": "http", "scheme": "bearer", "description": "Opaque login session; not JWT. Lost on API restart; never put in a Travel URL."}}, "schemas": schemas}}
@@ -108,7 +130,22 @@ collection = {
         request("Logout", "POST", "/api/v1/auth/logout", ['pm.test("session revoked", () => pm.response.to.have.status(204));'], auth=True),
         request("Revoked token denied", "GET", "/api/v1/inventory", ['pm.test("revoked token rejected", () => pm.response.to.have.status(401));'], auth=True),
     ]}
+reserve_check = request("Reserve raid", "POST", "/api/v1/raids/reservations", [
+    'pm.test("reservation accepted", () => { pm.response.to.have.status(201); pm.expect(pm.response.json().status).to.eql("Reserved"); });',
+    'pm.collectionVariables.set("raidId", pm.response.json().raidId); pm.collectionVariables.set("entryId", pm.response.json().entryId);'],
+    {"requestId": "{{matchRequestId}}", "mapId": "beacon"}, auth=True)
+reserve_check["event"].insert(0, {"listen": "prerequest", "script": {"type": "text/javascript", "exec": [
+    'pm.collectionVariables.set("matchRequestId", pm.variables.replaceIn("{{$guid}}"));',
+    'pm.collectionVariables.set("cancelRequestId", pm.variables.replaceIn("{{$guid}}"));']}})
+collection["item"][3:3] = [reserve_check,
+    request("Current raid entry", "GET", "/api/v1/raids/current-entry", [
+        'pm.test("own reservation recovered", () => { pm.response.to.have.status(200); pm.expect(pm.response.json().entryId).to.eql(pm.collectionVariables.get("entryId")); });'], auth=True),
+    request("Cancel raid", "POST", "/api/v1/raids/{{raidId}}/entry/cancel", [
+        'pm.test("reservation cancelled", () => { pm.response.to.have.status(200); pm.expect(pm.response.json().status).to.eql("Cancelled"); });'],
+        {"requestId": "{{cancelRequestId}}", "entryId": "{{entryId}}"}, auth=True),
+    request("Cancelled entry not active", "GET", "/api/v1/raids/current-entry", [
+        'pm.test("no active reservation after cancellation", () => pm.response.to.have.status(404));'], auth=True)]
 output = root / "Contracts/Postman/lobby.postman_collection.json"
 output.parent.mkdir(parents=True, exist_ok=True)
 output.write_text(json.dumps(collection, indent=2) + "\n", encoding="utf-8", newline="\n")
-print("Generated OpenAPI (9 paths) and local Postman collection (8 assertions).")
+print(f"Generated OpenAPI ({len(paths)} paths) and local Postman collection.")

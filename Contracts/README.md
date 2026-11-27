@@ -19,4 +19,4 @@ M1 conventions:
 
 C# Domain code is not directly shared with C++. Preserve this contract, manifest version and test vectors when implementing UE transport, preview and replication. UE UI should use one ItemManager interface while its transport changes between lobby HTTP and future raid RPC/replication.
 
-The current UE module contains no implementation of this HTTP client yet. Raid entry/escrow/claim/settlement, protected slots, durability gameplay and server-to-server authentication are future work, not M1 endpoints.
+The functional client in Grid-based-Inventory-System now adapts v1 login/snapshot responses and exposes StartMatching/CancelMatching/RefreshMatchingStatus. The new DeltaForce_CPP UE module is still the later port destination. See Server/Matching.ko.md for Blueprint wiring and the v1.1 reservation endpoints. Reserved does not lock inventory or imply a ready dedicated server. Entry commit/escrow/claim/settlement, protected slots, durability gameplay and server-to-server authentication remain future work.

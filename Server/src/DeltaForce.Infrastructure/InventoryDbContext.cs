@@ -73,6 +73,8 @@ public sealed class InventoryDbContext(DbContextOptions<InventoryDbContext> opti
     public DbSet<ContainerRow> Containers => Set<ContainerRow>();
     public DbSet<OperationRow> Operations => Set<OperationRow>();
     public DbSet<RetiredItemRow> RetiredItems => Set<RetiredItemRow>();
+    public DbSet<RaidEntryRow> RaidEntries => Set<RaidEntryRow>();
+    public DbSet<RaidRequestRow> RaidRequests => Set<RaidRequestRow>();
 
     protected override void OnModelCreating(ModelBuilder model)
     {
@@ -120,5 +122,19 @@ public sealed class InventoryDbContext(DbContextOptions<InventoryDbContext> opti
         retired.ToTable("RetiredItems");
         retired.HasKey(r => r.ItemId);
         retired.HasOne<PlayerRow>().WithMany().HasForeignKey(r => r.PlayerId).OnDelete(DeleteBehavior.Restrict);
+        var entry = model.Entity<RaidEntryRow>();
+        entry.ToTable("RaidEntries", t => t.HasCheckConstraint("CK_RaidEntries_State",
+            "([Status] = N'Reserved' AND [IsActive] = 1) OR ([Status] = N'Cancelled' AND [IsActive] = 0)"));
+        entry.HasKey(e => e.EntryId);
+        entry.Property(e => e.MapId).HasMaxLength(64).UseCollation("Latin1_General_100_BIN2");
+        entry.Property(e => e.Status).HasMaxLength(32);
+        entry.HasIndex(e => new { e.PlayerId, e.RaidId }).IsUnique();
+        entry.HasIndex(e => e.PlayerId).IsUnique().HasFilter("[IsActive] = 1");
+        entry.HasOne<PlayerRow>().WithMany().HasForeignKey(e => e.PlayerId).OnDelete(DeleteBehavior.Restrict);
+        var raidRequest = model.Entity<RaidRequestRow>();
+        raidRequest.ToTable("RaidRequestRecords");
+        raidRequest.HasKey(r => new { r.PlayerId, r.RequestId });
+        raidRequest.Property(r => r.PayloadHash).HasMaxLength(64).IsUnicode(false);
+        raidRequest.HasOne<PlayerRow>().WithMany().HasForeignKey(r => r.PlayerId).OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -201,6 +201,79 @@ namespace DeltaForce.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("DeltaForce.Infrastructure.RaidEntryRow", b =>
+                {
+                    b.Property<Guid>("EntryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MapId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)")
+                        .UseCollation("Latin1_General_100_BIN2");
+
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RaidId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.HasKey("EntryId");
+
+                    b.HasIndex("PlayerId")
+                        .IsUnique()
+                        .HasFilter("[IsActive] = 1");
+
+                    b.HasIndex("PlayerId", "RaidId")
+                        .IsUnique();
+
+                    b.ToTable("RaidEntries", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_RaidEntries_State", "([Status] = N'Reserved' AND [IsActive] = 1) OR ([Status] = N'Cancelled' AND [IsActive] = 0)");
+                        });
+                });
+
+            modelBuilder.Entity("DeltaForce.Infrastructure.RaidRequestRow", b =>
+                {
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RequestId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("PayloadHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(64)");
+
+                    b.Property<string>("ResponseJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StatusCode")
+                        .HasColumnType("int");
+
+                    b.HasKey("PlayerId", "RequestId");
+
+                    b.ToTable("RaidRequestRecords", (string)null);
+                });
+
             modelBuilder.Entity("DeltaForce.Infrastructure.RetiredItemRow", b =>
                 {
                     b.Property<Guid>("ItemId")
@@ -261,6 +334,24 @@ namespace DeltaForce.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("DeltaForce.Infrastructure.OperationRow", b =>
+                {
+                    b.HasOne("DeltaForce.Infrastructure.PlayerRow", null)
+                        .WithMany()
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DeltaForce.Infrastructure.RaidEntryRow", b =>
+                {
+                    b.HasOne("DeltaForce.Infrastructure.PlayerRow", null)
+                        .WithMany()
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DeltaForce.Infrastructure.RaidRequestRow", b =>
                 {
                     b.HasOne("DeltaForce.Infrastructure.PlayerRow", null)
                         .WithMany()

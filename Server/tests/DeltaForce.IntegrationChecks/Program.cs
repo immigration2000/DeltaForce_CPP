@@ -165,6 +165,7 @@ try
         "equipment swap satisfies SQL unique slots and returns both slot changes");
     Expect(afterEquipmentSwap.Slots.Single(s => s.SlotTag == "Slot.Backpack").ItemId == bag, "equipment state survives unrelated commands");
     var persisted = await Snapshot(a);
+    var raidCheckpoint = await RaidChecks.RunAsync(a, aOtherProcess, b, Expect, text => Sql(text, connection));
     await Stop(second); await Stop(first);
     await using (var passwordConnection = new SqlConnection(connection))
     {
@@ -177,6 +178,14 @@ try
     first = await Start(firstPort, true, resetPasswords: true);
     Expect((int)(await a.GetAsync("/api/v1/inventory")).StatusCode == 401, "API restart expires in-memory sessions");
     using var restored = await Login(firstPort, "demo");
+    var recoveredEntry = await restored.GetFromJsonAsync<RaidReservation>("/api/v1/raids/current-entry", ContractJson.Options);
+    Expect(Same(raidCheckpoint.Reservation, recoveredEntry!), "matching reservation survives API restart and login");
+    using var matchingReplay = await restored.GetAsync($"/api/v1/raids/requests/{raidCheckpoint.RequestId}");
+    Expect((int)matchingReplay.StatusCode == 201 && Same(raidCheckpoint.Reservation,
+        (await matchingReplay.Content.ReadFromJsonAsync<RaidReservation>(ContractJson.Options))!), "matching request result survives API restart");
+    using var cancelRecovered = await restored.PostAsJsonAsync($"/api/v1/raids/{recoveredEntry!.RaidId}/entry/cancel",
+        new CancelRaidRequest(Guid.NewGuid(), recoveredEntry.EntryId), ContractJson.Options);
+    Expect((int)cancelRecovered.StatusCode == 200, "recovered matching reservation can be cancelled");
     using var restoredOther = await Login(firstPort, "demo2");
     Expect(Same(other, await Snapshot(restoredOther)), "demo2 password reset preserves its inventory and revision");
     var oldPasswordLogin = await anonymous.PostAsJsonAsync("/api/v1/auth/login", new LoginRequest("demo", "previous-demo-password"), ContractJson.Options);

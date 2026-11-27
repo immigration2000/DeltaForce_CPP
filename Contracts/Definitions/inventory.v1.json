@@ -1,0 +1,3987 @@
+{
+  "schemaVersion": 1,
+  "rulesVersion": "inventory-v1",
+  "source": "Grid-based-Inventory-System UE exports; durability is unmodelled (0), not an original game value",
+  "items": [
+    {
+      "id": "15010010004",
+      "displayName": "Toothpaste",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15010010008",
+      "displayName": "Matches",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15010010013",
+      "displayName": "Electric Lighter",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15010010015",
+      "displayName": "Mini Hydrogen Battery",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15010050001",
+      "displayName": "Golden Gazelle",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010001",
+      "displayName": "Precision Tool Set",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010002",
+      "displayName": "Waterproof Tape",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010003",
+      "displayName": "Duct Tape",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010004",
+      "displayName": "Paint Brush",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010005",
+      "displayName": "Screwdriver",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010006",
+      "displayName": "Multitool",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010007",
+      "displayName": "Electric Breaching Hammer",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010008",
+      "displayName": "Wood Board",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010010",
+      "displayName": "Sonic Distance Tape Measure",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010012",
+      "displayName": "Wire",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010014",
+      "displayName": "Set Square",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010015",
+      "displayName": "Pack of Cement",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 3,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010016",
+      "displayName": "Bucket of Paint",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010017",
+      "displayName": "Portable Hydraulic Wrench",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010018",
+      "displayName": "Hammer Drill",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010019",
+      "displayName": "Needle-Nose Pliers",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010020",
+      "displayName": "Voltage Tester",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010021",
+      "displayName": "Angle Grinder",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010023",
+      "displayName": "High-precision Digital Caliper",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010024",
+      "displayName": "High-power Crusher",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010025",
+      "displayName": "Polymer Fabric",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010026",
+      "displayName": "Corrugated Tube",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010027",
+      "displayName": "Analog Thermometer",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010028",
+      "displayName": "Fuel",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010030",
+      "displayName": "Spray Paint",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010031",
+      "displayName": "Reinforced Carbon Fiberboard",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 3,
+      "height": 3,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010032",
+      "displayName": "LED Light",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010033",
+      "displayName": "Rocket Fuel",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 3,
+      "height": 4,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010034",
+      "displayName": "Basic Fuel",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010035",
+      "displayName": "Premium Fuel",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010036",
+      "displayName": "Fuel Cell",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 3,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020010037",
+      "displayName": "Gas Tank",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020040001",
+      "displayName": "Tool Kit",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020040002",
+      "displayName": "Aramid Fiber",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020040003",
+      "displayName": "Manometer",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020040004",
+      "displayName": "Leveler",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020050001",
+      "displayName": "Spinning Handsaw",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020050002",
+      "displayName": "Cordless Portable Drill",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020050003",
+      "displayName": "Polyethylene Fiber",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020050004",
+      "displayName": "Ceramic Armor",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020050005",
+      "displayName": "Special Steel",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020050006",
+      "displayName": "Titanium Alloy",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020050007",
+      "displayName": "Capacitor",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15020050008",
+      "displayName": "Relay",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030010001",
+      "displayName": "Military Power Bank",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030010002",
+      "displayName": "Lithium Battery",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030010007",
+      "displayName": "DVD Drive",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030010008",
+      "displayName": "Audio Player",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030010009",
+      "displayName": "Mouse",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030010011",
+      "displayName": "Power",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030010012",
+      "displayName": "Video Camera",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030010013",
+      "displayName": "Printed Circuit Board",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030010014",
+      "displayName": "Keyboard",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030010018",
+      "displayName": "Air-Cooled Heat Sink",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030010019",
+      "displayName": "HDD",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030040001",
+      "displayName": "Lens",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030040002",
+      "displayName": "Camera",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030040003",
+      "displayName": "CPU",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030040005",
+      "displayName": "SSD",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030040006",
+      "displayName": "RAM",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030040007",
+      "displayName": "ASOS Motherboard",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030040010",
+      "displayName": "LCD Screen",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030040011",
+      "displayName": "UHF Card Reader",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030040012",
+      "displayName": "Radio",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030040013",
+      "displayName": "Cell Phone",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030040014",
+      "displayName": "ECM Jammer",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030050001",
+      "displayName": "Graphics Card",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030050002",
+      "displayName": "Military UAV",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030050003",
+      "displayName": "Programmable Processor",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030050004",
+      "displayName": "Military Radio",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030050005",
+      "displayName": "HiFi Sound Card",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030050006",
+      "displayName": "Digital Camera",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030050007",
+      "displayName": "Laptop",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 3,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030050008",
+      "displayName": "Blade Server",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 3,
+      "height": 4,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030050011",
+      "displayName": "GS5 Controller",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030050012",
+      "displayName": "High-Speed Disk Array",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 4,
+      "height": 3,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030050013",
+      "displayName": "G.T.I. SATCOM Antenna",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030050014",
+      "displayName": "Flight Recorder",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 3,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030050016",
+      "displayName": "Solar Panel",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 4,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030050017",
+      "displayName": "Military Shell",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 3,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030050018",
+      "displayName": "Military Control Terminal",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15030050019",
+      "displayName": "Military Explosive",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15040010003",
+      "displayName": "Ancient Sphinx Statue",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15040010007",
+      "displayName": "Card - Jack",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15040010008",
+      "displayName": "Card - Queen",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15040010009",
+      "displayName": "Card - King",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15040010012",
+      "displayName": "Socket",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15040010014",
+      "displayName": "Ahsarah Glamour Hookah",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15040010015",
+      "displayName": "Spy Pen",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15040010016",
+      "displayName": "Network Cable",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15040010017",
+      "displayName": "Gunpowder",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15040010019",
+      "displayName": "E-Type Canister",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15040010021",
+      "displayName": "Firearm Parts",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15040010022",
+      "displayName": "Socket Adapter",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15040010023",
+      "displayName": "Mobile Cable",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15040040007",
+      "displayName": "EV Battery",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 3,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15040050002",
+      "displayName": "Bust of Claudius",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 2,
+      "height": 3,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15040050003",
+      "displayName": "Damaged Thermal Imager",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060010001",
+      "displayName": "Saline Solution",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060010002",
+      "displayName": "Surgical Forceps",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060010003",
+      "displayName": "Small Vial",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060010004",
+      "displayName": "Forehead Thermometer",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060010006",
+      "displayName": "Stethoscope",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060010007",
+      "displayName": "Medical Alcohol",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060010008",
+      "displayName": "Surgical Scissors",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060010009",
+      "displayName": "Surgical Gloves",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060010010",
+      "displayName": "Injector",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060010012",
+      "displayName": "Infusion Set",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060040001",
+      "displayName": "LEDX",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060040002",
+      "displayName": "Blood Pressure Meter",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060040003",
+      "displayName": "Oximeter",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060040004",
+      "displayName": "Ventilator",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060080001",
+      "displayName": "Apple",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060080002",
+      "displayName": "Yogurt",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060080003",
+      "displayName": "Basic Protein Powder",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060080004",
+      "displayName": "Sugar Free Energy Bar",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060080005",
+      "displayName": "Lemon Tea",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060080006",
+      "displayName": "Purified Water",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060080007",
+      "displayName": "Crispy Noodles",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060080008",
+      "displayName": "Orange Energy Gel",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060080009",
+      "displayName": "Field Energy Bar",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060080010",
+      "displayName": "Fried Noodles",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060080011",
+      "displayName": "Coke",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060080013",
+      "displayName": "Canned Ration",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060080014",
+      "displayName": "Coffee",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060080015",
+      "displayName": "Olivia Champagne",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15060080016",
+      "displayName": "Soy Protein Powder Packet",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15070010001",
+      "displayName": "Flash Drive",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15070010002",
+      "displayName": "Memory Card",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15070010005",
+      "displayName": "Architectural Drawing 1",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15070010006",
+      "displayName": "Architectural Drawing 2",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15070010007",
+      "displayName": "Architectural Drawing 3",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15070010008",
+      "displayName": "Architectural Drawing 4",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15070010009",
+      "displayName": "Architectural Drawing 5",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15070040001",
+      "displayName": "Data: Design Blueprints",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15070040002",
+      "displayName": "Data: Trade Documents",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15070040003",
+      "displayName": "Experimental Data",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15070050001",
+      "displayName": "Quantum Storage",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15070050002",
+      "displayName": "Data: Military Intel",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15070050003",
+      "displayName": "Intel Document",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080010003",
+      "displayName": "Djembe",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080010004",
+      "displayName": "Solar Dish",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080040001",
+      "displayName": "Spinosaurus Claw Fossil",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080040002",
+      "displayName": "Cutlass",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080040003",
+      "displayName": "Antler Wall Decoration",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080040004",
+      "displayName": "Bullet Pendant",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080040005",
+      "displayName": "African Wood Sculpture",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050001",
+      "displayName": "Empress Earrings",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050002",
+      "displayName": "Pure Gold Lighter",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050003",
+      "displayName": "Smoothbore Gun Exhibit",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 4,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050004",
+      "displayName": "Merit Medal",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050006",
+      "displayName": "Heart of Africa",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050007",
+      "displayName": "Rusty Pirate Copper Coin",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050008",
+      "displayName": "Weird Pirate Silver Coin",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050009",
+      "displayName": "Shiny Pirate Gold Coin",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050010",
+      "displayName": "999.9 Gold Bar",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050011",
+      "displayName": "Ancient Pirate Telescope",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050012",
+      "displayName": "Dancing Girl - Charm",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050013",
+      "displayName": "Reis's Music Scorebook",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050014",
+      "displayName": "Saeed's Pocket Watch",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050015",
+      "displayName": "Ahsarah Specialty Wine Glass",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050016",
+      "displayName": "Ahsarah Specialty Flask",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050017",
+      "displayName": "Ahsarah Specialty Ceramics",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050018",
+      "displayName": "Gold Crest",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050019",
+      "displayName": "Hotel Poster",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050020",
+      "displayName": "Ahsarah News Weekly",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050021",
+      "displayName": "Ahsarah Fashion Weekly",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050022",
+      "displayName": "Ahsarah Entertainment Monthly",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050023",
+      "displayName": "Basic Ammo Production Part",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050024",
+      "displayName": "Intermediate Ammo Production Part",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050025",
+      "displayName": "Premium Ammo Production Part",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 3,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050026",
+      "displayName": "Delta Force: Black Hawk Down - Team Sabre",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050027",
+      "displayName": "Delta Force: Task Force Dagger",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050030",
+      "displayName": "MandelBrick Supercomputing Unit",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 3,
+      "height": 3,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050031",
+      "displayName": "Portable Military Radar",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 3,
+      "height": 3,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050032",
+      "displayName": "Military Information Terminal",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 3,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050033",
+      "displayName": "Military Satellite Communication Device",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050034",
+      "displayName": "SLR Camera",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050035",
+      "displayName": "Military Binoculars",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050036",
+      "displayName": "Military Thermal Imaging Device",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 3,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050037",
+      "displayName": "Wide-Angle Lens",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050038",
+      "displayName": "Professional Sound Card",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050039",
+      "displayName": "Electronic Thermometer",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050040",
+      "displayName": "Battle Tank Model",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 3,
+      "height": 3,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050041",
+      "displayName": "Infantry Fighting Vehicle Model",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 3,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050042",
+      "displayName": "Luxury Mechanical Watch",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050043",
+      "displayName": "Ceremony Dagger",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 3,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050044",
+      "displayName": "Top Secret Server",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 3,
+      "height": 3,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050045",
+      "displayName": "Encrypted Router",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050046",
+      "displayName": "Card - 10",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050047",
+      "displayName": "Card - 9",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050048",
+      "displayName": "Card - 8",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050049",
+      "displayName": "Card - 7",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050050",
+      "displayName": "Card - 6",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050051",
+      "displayName": "Card - 5",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050052",
+      "displayName": "Card - 4",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050053",
+      "displayName": "Card - 3",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050054",
+      "displayName": "Card - 2",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050055",
+      "displayName": "Card - Ace",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050056",
+      "displayName": "Document Fragment",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050057",
+      "displayName": "Sterile Dressing Pack",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050058",
+      "displayName": "Automated External Defibrillator",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 2,
+      "height": 3,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050059",
+      "displayName": "Card - Small Joker",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050060",
+      "displayName": "Card - Big Joker",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050061",
+      "displayName": "Cloud Storage Array",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 3,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050062",
+      "displayName": "Array Server",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 4,
+      "height": 3,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050063",
+      "displayName": "Haavk Confidential Files",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050064",
+      "displayName": "Ahsarah Guard Confidential Files",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050065",
+      "displayName": "Bone Saw",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 3,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050066",
+      "displayName": "Robot Cleaner",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 3,
+      "height": 3,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050067",
+      "displayName": "High-Power Vacuum Cleaner",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 2,
+      "height": 3,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050068",
+      "displayName": "Capsule Coffee Machine Set",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050069",
+      "displayName": "Premium Coffee Beans",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050070",
+      "displayName": "Delta Force: Black Hawk Down (Disc Ver.)",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050071",
+      "displayName": "Boxed Drip Coffee",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050072",
+      "displayName": "Mocha Coffee Pot",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050073",
+      "displayName": "Vitamin Effervescent Tablets",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050074",
+      "displayName": "English Tea Bag",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050075",
+      "displayName": "Wooden Carved Pipe",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050076",
+      "displayName": "Sugar Bun",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050077",
+      "displayName": "Seasoning Set",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050078",
+      "displayName": "Bagged Coffee Beans",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050079",
+      "displayName": "Local Rebrewed Coffee",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050080",
+      "displayName": "Super Glue",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050081",
+      "displayName": "Pepper Bottle",
+      "categoryTag": "Item.Category.Material.Household",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050082",
+      "displayName": "Local Specialty Jewelry",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 3,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050083",
+      "displayName": "Mantel Clock",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050084",
+      "displayName": "Stone Hammer",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 3,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050085",
+      "displayName": "Claw Hammer",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050086",
+      "displayName": "Box of Nails",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050087",
+      "displayName": "Handsaw",
+      "categoryTag": "Item.Category.Material.Tool",
+      "itemTags": [],
+      "width": 3,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050088",
+      "displayName": "Large Radio Station",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 3,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050089",
+      "displayName": "Military Trajectory Computer",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050090",
+      "displayName": "High-Speed SSD",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050091",
+      "displayName": "Portable Speakers",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050092",
+      "displayName": "Guard Gold Ring",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050093",
+      "displayName": "Ace Staff Trophy",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050094",
+      "displayName": "Saeed's Crossbow",
+      "categoryTag": "Item.Category.Material.Valuable",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050095",
+      "displayName": "Neural Interface Terminal",
+      "categoryTag": "Item.Category.Material.Electronics",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050096",
+      "displayName": "Intel Recorder",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 1,
+      "height": 3,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050097",
+      "displayName": "Medical Ventilator",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 3,
+      "height": 3,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050098",
+      "displayName": "Micro Reactor",
+      "categoryTag": "Item.Category.Material.Fuel",
+      "itemTags": [],
+      "width": 3,
+      "height": 3,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050099",
+      "displayName": "Armored Vehicle Battery",
+      "categoryTag": "Item.Category.Material.Fuel",
+      "itemTags": [],
+      "width": 3,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050100",
+      "displayName": "Power Battery Pack",
+      "categoryTag": "Item.Category.Material.Fuel",
+      "itemTags": [],
+      "width": 4,
+      "height": 3,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050101",
+      "displayName": "Solid Fuel",
+      "categoryTag": "Item.Category.Material.Fuel",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050102",
+      "displayName": "Signal Stick",
+      "categoryTag": "Item.Category.Material.Fuel",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050103",
+      "displayName": "Gas Torch",
+      "categoryTag": "Item.Category.Material.Fuel",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050105",
+      "displayName": "Military Camping Light",
+      "categoryTag": "Item.Category.Material.Fuel",
+      "itemTags": [],
+      "width": 1,
+      "height": 3,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050106",
+      "displayName": "Portable Survival Kit",
+      "categoryTag": "Item.Category.Material.Fuel",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050107",
+      "displayName": "Hunting Matches",
+      "categoryTag": "Item.Category.Material.Fuel",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050108",
+      "displayName": "Multi-Purpose Battery",
+      "categoryTag": "Item.Category.Material.Fuel",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050109",
+      "displayName": "Light Outdoor Stove",
+      "categoryTag": "Item.Category.Material.Fuel",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050110",
+      "displayName": "Rechargeable Battery Pack",
+      "categoryTag": "Item.Category.Material.Fuel",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050111",
+      "displayName": "9V Battery",
+      "categoryTag": "Item.Category.Material.Fuel",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15080050112",
+      "displayName": "Boxed Candles",
+      "categoryTag": "Item.Category.Material.Fuel",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15090010024",
+      "displayName": "Military Photo",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15090010026",
+      "displayName": "Portrait Photo",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15090010040",
+      "displayName": "Mechanical Worker Bee Model",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 3,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15090010041",
+      "displayName": "Medical UAV",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15090010077",
+      "displayName": "Sample Test Tube",
+      "categoryTag": "Item.Category.Material.Medical",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15090910016",
+      "displayName": "Local Newspaper",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15090910017",
+      "displayName": "Private Notebook",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15090910019",
+      "displayName": "Transaction Sheet",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15090910022",
+      "displayName": "Stamped Through Bill of Lading",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15090910023",
+      "displayName": "Personal Note",
+      "categoryTag": "Item.Category.Material.Intel",
+      "itemTags": [],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "11010006002",
+      "displayName": "H70 Elite Helmet",
+      "categoryTag": "Item.Category.Equipment.Helmet",
+      "itemTags": [
+        "Item.Trait.Equipable"
+      ],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "11050005001",
+      "displayName": "Elite Vest",
+      "categoryTag": "Item.Category.Equipment.Armor",
+      "itemTags": [
+        "Item.Trait.Equipable"
+      ],
+      "width": 3,
+      "height": 4,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "11070004003",
+      "displayName": "DRC Advanced Recon Chest Rig",
+      "categoryTag": "Item.Category.Container.ChestRig",
+      "itemTags": [
+        "Item.Trait.Equipable",
+        "Item.Trait.HasStorage"
+      ],
+      "width": 2,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "11080001001",
+      "displayName": "Sling Bag",
+      "categoryTag": "Item.Category.Container.Backpack",
+      "itemTags": [
+        "Item.Trait.Equipable",
+        "Item.Trait.HasStorage"
+      ],
+      "width": 1,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "14020000001",
+      "displayName": "Basic Injector",
+      "categoryTag": "Item.Category.Medical.Healing",
+      "itemTags": [
+        "Item.Trait.Consumable"
+      ],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "14020000004",
+      "displayName": "Field First Aid Kit",
+      "categoryTag": "Item.Category.Medical.Healing",
+      "itemTags": [
+        "Item.Trait.Consumable"
+      ],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15050100008",
+      "displayName": "Substation Tech Room",
+      "categoryTag": "Item.Category.Key",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "15050100019",
+      "displayName": "East Wing Manager's Office",
+      "categoryTag": "Item.Category.Key",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "18010000006",
+      "displayName": "AKM Assault Rifle",
+      "categoryTag": "Item.Category.Weapon.Rifle",
+      "itemTags": [
+        "Item.Trait.Equipable"
+      ],
+      "width": 5,
+      "height": 2,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "18070000033",
+      "displayName": "M1911",
+      "categoryTag": "Item.Category.Weapon.Pistol",
+      "itemTags": [
+        "Item.Trait.Equipable"
+      ],
+      "width": 2,
+      "height": 1,
+      "maxStack": 1,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "37100200001",
+      "displayName": "5.56x45mm FMJ",
+      "categoryTag": "Item.Category.Ammo",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 60,
+      "itemLevel": 1,
+      "maxDurability": 0
+    },
+    {
+      "id": "37110400001",
+      "displayName": "7.62x39mm BP",
+      "categoryTag": "Item.Category.Ammo",
+      "itemTags": [],
+      "width": 1,
+      "height": 1,
+      "maxStack": 60,
+      "itemLevel": 1,
+      "maxDurability": 0
+    }
+  ],
+  "layouts": [
+    {
+      "id": "Backpack_Sling_11080001001",
+      "grids": [
+        {
+          "width": 2,
+          "height": 3
+        }
+      ]
+    },
+    {
+      "id": "Backpack_HeavyClimbing_11080006002",
+      "grids": [
+        {
+          "width": 5,
+          "height": 6
+        },
+        {
+          "width": 1,
+          "height": 2
+        },
+        {
+          "width": 3,
+          "height": 2
+        },
+        {
+          "width": 1,
+          "height": 2
+        }
+      ]
+    },
+    {
+      "id": "ChestRig_D01Light_11070002003",
+      "grids": [
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 2
+        },
+        {
+          "width": 1,
+          "height": 2
+        },
+        {
+          "width": 1,
+          "height": 2
+        }
+      ]
+    },
+    {
+      "id": "ChestRig_DARAssault_11070005004",
+      "grids": [
+        {
+          "width": 2,
+          "height": 1
+        },
+        {
+          "width": 2,
+          "height": 2
+        },
+        {
+          "width": 1,
+          "height": 3
+        },
+        {
+          "width": 1,
+          "height": 3
+        },
+        {
+          "width": 2,
+          "height": 1
+        },
+        {
+          "width": 2,
+          "height": 2
+        },
+        {
+          "width": 2,
+          "height": 3
+        }
+      ]
+    },
+    {
+      "id": "ChestRig_DRCAdvancedRecon_Half_11070004003",
+      "grids": [
+        {
+          "width": 2,
+          "height": 2
+        },
+        {
+          "width": 2,
+          "height": 2
+        },
+        {
+          "width": 1,
+          "height": 3
+        },
+        {
+          "width": 1,
+          "height": 3
+        },
+        {
+          "width": 1,
+          "height": 3
+        }
+      ]
+    },
+    {
+      "id": "Stash_Main_00",
+      "grids": [
+        {
+          "width": 9,
+          "height": 35
+        }
+      ]
+    },
+    {
+      "id": "Stash_Main_01",
+      "grids": [
+        {
+          "width": 9,
+          "height": 36
+        }
+      ]
+    },
+    {
+      "id": "Stash_Main_02",
+      "grids": [
+        {
+          "width": 9,
+          "height": 37
+        }
+      ]
+    },
+    {
+      "id": "Stash_Main_03",
+      "grids": [
+        {
+          "width": 9,
+          "height": 38
+        }
+      ]
+    },
+    {
+      "id": "Stash_Main_04",
+      "grids": [
+        {
+          "width": 9,
+          "height": 39
+        }
+      ]
+    },
+    {
+      "id": "Stash_Main_05",
+      "grids": [
+        {
+          "width": 9,
+          "height": 40
+        }
+      ]
+    },
+    {
+      "id": "Stash_Main_06",
+      "grids": [
+        {
+          "width": 9,
+          "height": 41
+        }
+      ]
+    },
+    {
+      "id": "Stash_Main_07",
+      "grids": [
+        {
+          "width": 9,
+          "height": 42
+        }
+      ]
+    },
+    {
+      "id": "Stash_Main_08",
+      "grids": [
+        {
+          "width": 9,
+          "height": 43
+        }
+      ]
+    },
+    {
+      "id": "Stash_Main_09",
+      "grids": [
+        {
+          "width": 9,
+          "height": 44
+        }
+      ]
+    },
+    {
+      "id": "Stash_Main_10",
+      "grids": [
+        {
+          "width": 9,
+          "height": 45
+        }
+      ]
+    },
+    {
+      "id": "Pocket",
+      "grids": [
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_File_Basic",
+      "grids": [
+        {
+          "width": 9,
+          "height": 4
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_Weapon_Intermediate",
+      "grids": [
+        {
+          "width": 9,
+          "height": 6
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_Weapon_Premium",
+      "grids": [
+        {
+          "width": 9,
+          "height": 8
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_Weapon_GTI",
+      "grids": [
+        {
+          "width": 9,
+          "height": 12
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_Material_Rookie",
+      "grids": [
+        {
+          "width": 9,
+          "height": 2
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_Material_Basic",
+      "grids": [
+        {
+          "width": 9,
+          "height": 4
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_Material_Intermediate",
+      "grids": [
+        {
+          "width": 9,
+          "height": 6
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_Material_Premium",
+      "grids": [
+        {
+          "width": 9,
+          "height": 10
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_Material_GTI",
+      "grids": [
+        {
+          "width": 9,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_Medical_Basic",
+      "grids": [
+        {
+          "width": 9,
+          "height": 4
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_Medical_Premium",
+      "grids": [
+        {
+          "width": 9,
+          "height": 8
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_Gear_Intermediate",
+      "grids": [
+        {
+          "width": 9,
+          "height": 6
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_Gear_Premium",
+      "grids": [
+        {
+          "width": 9,
+          "height": 8
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_Gear_GTI",
+      "grids": [
+        {
+          "width": 9,
+          "height": 14
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_Ammo_Basic",
+      "grids": [
+        {
+          "width": 9,
+          "height": 4
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_Ammo_Premium",
+      "grids": [
+        {
+          "width": 9,
+          "height": 8
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_Item_Premium",
+      "grids": [
+        {
+          "width": 9,
+          "height": 8
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_Item_GTI",
+      "grids": [
+        {
+          "width": 9,
+          "height": 10
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_Collectible_Intermediate",
+      "grids": [
+        {
+          "width": 9,
+          "height": 6
+        }
+      ]
+    },
+    {
+      "id": "Stash_Expansion_Collectible_Premium",
+      "grids": [
+        {
+          "width": 9,
+          "height": 12
+        }
+      ]
+    },
+    {
+      "id": "SafeBox_Basic",
+      "grids": [
+        {
+          "width": 2,
+          "height": 1
+        }
+      ]
+    },
+    {
+      "id": "SafeBox_Advanced",
+      "grids": [
+        {
+          "width": 2,
+          "height": 2
+        }
+      ]
+    },
+    {
+      "id": "SafeBox_Premium",
+      "grids": [
+        {
+          "width": 3,
+          "height": 2
+        }
+      ]
+    },
+    {
+      "id": "SafeBox_Ultimate",
+      "grids": [
+        {
+          "width": 3,
+          "height": 3
+        }
+      ]
+    },
+    {
+      "id": "CardHolder_Basic_PerMap",
+      "grids": [
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        }
+      ]
+    },
+    {
+      "id": "CardHolder_Advanced_PerMap",
+      "grids": [
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        }
+      ]
+    },
+    {
+      "id": "CardHolder_Premium_PerMap",
+      "grids": [
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        }
+      ]
+    },
+    {
+      "id": "CardHolder_Top_PerMap",
+      "grids": [
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        }
+      ]
+    },
+    {
+      "id": "CardHolder_SpecOps_PerMap",
+      "grids": [
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        },
+        {
+          "width": 1,
+          "height": 1
+        }
+      ]
+    }
+  ],
+  "slots": [
+    {
+      "tag": "Slot.Helmet",
+      "allowedCategories": [
+        "Item.Category.Equipment.Helmet"
+      ],
+      "excludedCategories": []
+    },
+    {
+      "tag": "Slot.Armor",
+      "allowedCategories": [
+        "Item.Category.Equipment.Armor"
+      ],
+      "excludedCategories": []
+    },
+    {
+      "tag": "Slot.Backpack",
+      "allowedCategories": [
+        "Item.Category.Container.Backpack"
+      ],
+      "excludedCategories": []
+    },
+    {
+      "tag": "Slot.ChestRig",
+      "allowedCategories": [
+        "Item.Category.Container.ChestRig"
+      ],
+      "excludedCategories": []
+    },
+    {
+      "tag": "Slot.Sidearm",
+      "allowedCategories": [
+        "Item.Category.Weapon.Pistol"
+      ],
+      "excludedCategories": []
+    },
+    {
+      "tag": "Slot.Melee",
+      "allowedCategories": [
+        "Item.Category.Weapon.Melee"
+      ],
+      "excludedCategories": []
+    },
+    {
+      "tag": "Slot.Primary01",
+      "allowedCategories": [
+        "Item.Category.Weapon"
+      ],
+      "excludedCategories": [
+        "Item.Category.Weapon.Pistol",
+        "Item.Category.Weapon.Melee"
+      ]
+    },
+    {
+      "tag": "Slot.Primary02",
+      "allowedCategories": [
+        "Item.Category.Weapon"
+      ],
+      "excludedCategories": [
+        "Item.Category.Weapon.Pistol",
+        "Item.Category.Weapon.Melee"
+      ]
+    },
+    {
+      "tag": "Slot.SafeBox",
+      "allowedCategories": [
+        "Item.Category.Container.SecureCase"
+      ],
+      "excludedCategories": []
+    },
+    {
+      "tag": "Slot.KeyHolder",
+      "allowedCategories": [
+        "Item.Category.Container.SecureCase"
+      ],
+      "excludedCategories": []
+    }
+  ],
+  "storageRules": [
+    {
+      "tag": "Storage.Stash.Main",
+      "allowAnyItem": true,
+      "allowedTags": []
+    },
+    {
+      "tag": "Storage.Stash.Expansion.Ammo",
+      "allowAnyItem": false,
+      "allowedTags": [
+        "Item.Category.Ammo"
+      ]
+    },
+    {
+      "tag": "Storage.Stash.Expansion.Collectible",
+      "allowAnyItem": false,
+      "allowedTags": [
+        "Item.Category.Material.Electronics",
+        "Item.Category.Material.Fuel",
+        "Item.Category.Material.Household",
+        "Item.Category.Material.Intel",
+        "Item.Category.Material.Medical",
+        "Item.Category.Material.Tool",
+        "Item.Category.Material.Valuable"
+      ]
+    },
+    {
+      "tag": "Storage.Stash.Expansion.Gear",
+      "allowAnyItem": false,
+      "allowedTags": [
+        "Item.Category.Container.Backpack",
+        "Item.Category.Container.ChestRig",
+        "Item.Category.Equipment.Armor",
+        "Item.Category.Equipment.Helmet"
+      ]
+    },
+    {
+      "tag": "Storage.Stash.Expansion.Material",
+      "allowAnyItem": false,
+      "allowedTags": [
+        "Item.Category.Material.Electronics",
+        "Item.Category.Material.Fuel",
+        "Item.Category.Material.Household",
+        "Item.Category.Material.Intel",
+        "Item.Category.Material.Medical",
+        "Item.Category.Material.Tool",
+        "Item.Category.Material.Valuable"
+      ]
+    },
+    {
+      "tag": "Storage.Stash.Expansion.Medical",
+      "allowAnyItem": false,
+      "allowedTags": [
+        "Item.Category.Medical.Bandage",
+        "Item.Category.Medical.Booster",
+        "Item.Category.Medical.Healing",
+        "Item.Category.Medical.Painkiller",
+        "Item.Category.Medical.RepairKit",
+        "Item.Category.Medical.Surgery"
+      ]
+    },
+    {
+      "tag": "Storage.Stash.Expansion.Weapon",
+      "allowAnyItem": false,
+      "allowedTags": [
+        "Item.Category.Weapon",
+        "Item.Category.Attachment"
+      ]
+    },
+    {
+      "tag": "Storage.Backpack",
+      "allowAnyItem": true,
+      "allowedTags": []
+    },
+    {
+      "tag": "Storage.ChestRig",
+      "allowAnyItem": true,
+      "allowedTags": []
+    },
+    {
+      "tag": "Storage.KeyHolder",
+      "allowAnyItem": false,
+      "allowedTags": [
+        "Item.Category.Key"
+      ]
+    },
+    {
+      "tag": "Storage.LootContainer",
+      "allowAnyItem": true,
+      "allowedTags": []
+    },
+    {
+      "tag": "Storage.Pocket",
+      "allowAnyItem": true,
+      "allowedTags": []
+    },
+    {
+      "tag": "Storage.SafeBox",
+      "allowAnyItem": true,
+      "allowedTags": [
+        "Item.Category.Ammo",
+        "Item.Category.Key",
+        "Item.Category.Material.Electronics",
+        "Item.Category.Material.Fuel",
+        "Item.Category.Material.Household",
+        "Item.Category.Material.Intel",
+        "Item.Category.Material.Medical",
+        "Item.Category.Material.Tool",
+        "Item.Category.Material.Valuable",
+        "Item.Category.Medical.Bandage",
+        "Item.Category.Medical.Booster",
+        "Item.Category.Medical.Healing",
+        "Item.Category.Medical.Painkiller",
+        "Item.Category.Medical.RepairKit",
+        "Item.Category.Medical.Surgery"
+      ]
+    }
+  ]
+}

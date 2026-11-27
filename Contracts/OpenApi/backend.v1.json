@@ -1,0 +1,1967 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "DeltaForce Backend",
+    "version": "1.3.0",
+    "description": "M1 authoritative lobby backend. Contracts/README.md contains integration rules and boundaries."
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:5099"
+    }
+  ],
+  "security": [
+    {
+      "Session": []
+    }
+  ],
+  "paths": {
+    "/health/live": {
+      "get": {
+        "operationId": "liveness",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Process is alive",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "operationId": "readiness",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "MSSQL query succeeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "database": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "database"
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; check the same requestId before retrying",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "operationId": "login",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "New process-local session, 8-hour maximum lifetime",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request; a transport-level 400 may have no JSON body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid/expired session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "20 attempts/minute/IP"
+          },
+          "503": {
+            "description": "Dependency unavailable; check the same requestId before retrying",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "operationId": "logout",
+        "description": "Invalidate only this token. Inventory changes are already durable; no snapshot is uploaded.",
+        "responses": {
+          "204": {
+            "description": "Token revoked"
+          },
+          "401": {
+            "description": "Invalid/expired session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/definitions": {
+      "get": {
+        "operationId": "definitions",
+        "responses": {
+          "200": {
+            "description": "Server-authoritative immutable manifest and SHA-256 version",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Definitions"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid/expired session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inventory": {
+      "get": {
+        "operationId": "inventory",
+        "responses": {
+          "200": {
+            "description": "Consistent own-player snapshot",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Snapshot"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid/expired session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Player not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; check the same requestId before retrying",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inventory/operations": {
+      "post": {
+        "operationId": "executeInventoryOperation",
+        "description": "Exactly one durable result per player+requestId. Same canonical payload returns the stored result BEFORE revision validation. A different payload is 409. Successful state changes, revision and result commit together. Records have no TTL in M1. Swap exchanges full locations. Merge uses targetItemId and optional quantity (default all). Split requires quantity and returns a server-generated GUID. updatedItems are full upserts. Apply a delta only at its baseRevision; otherwise reload the snapshot.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventoryCommand"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Applied, or exact replay",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid intent/location",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationResult"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Container inaccessible",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationResult"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Item/container not found in this account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationResult"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Revision/source/definition/payload mismatch",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Collision, category, boundary, stack or containment rule rejection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationResult"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid/expired session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; check the same requestId before retrying",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/inventory/operations/{requestId}": {
+      "get": {
+        "operationId": "inventoryOperationResult",
+        "parameters": [
+          {
+            "name": "requestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "description": "Returns the stored result with its original HTTP status. Not recorded does not prove an in-flight request failed.",
+        "responses": {
+          "200": {
+            "description": "Stored success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Stored rejection or lookup error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/OperationResult"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ApiError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Stored rejection or lookup error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/OperationResult"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ApiError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Stored rejection or lookup error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/OperationResult"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ApiError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Stored rejection or lookup error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/OperationResult"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ApiError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Stored rejection or lookup error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/OperationResult"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ApiError"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid/expired session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; check the same requestId before retrying",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/raids/reservations": {
+      "post": {
+        "operationId": "reserveRaid",
+        "description": "Create one durable Reserved entry per player. This is matchmaking acceptance, not a ready dedicated server. No inventory lock or revision change occurs until the future entry commit stage. Reuse the same requestId after timeout. Replays return the original historical result; query current-entry for current state.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReserveRaidRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Malformed request; a transport-level 400 may have no JSON body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid/expired session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entry/result not found for this player",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "AlreadyMatching, RequestPayloadMismatch or EntryNotCancelable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; check the same requestId before retrying",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Reserved or exact replay",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RaidReservation"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/raids/current-entry": {
+      "get": {
+        "operationId": "currentRaidEntry",
+        "responses": {
+          "200": {
+            "description": "Current reservation or stored result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RaidReservation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request; a transport-level 400 may have no JSON body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid/expired session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entry/result not found for this player",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "AlreadyMatching, RequestPayloadMismatch or EntryNotCancelable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; check the same requestId before retrying",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/raids/{raidId}/entry": {
+      "get": {
+        "operationId": "raidEntry",
+        "parameters": [
+          {
+            "name": "raidId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current reservation or stored result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RaidReservation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request; a transport-level 400 may have no JSON body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid/expired session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entry/result not found for this player",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "AlreadyMatching, RequestPayloadMismatch or EntryNotCancelable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; check the same requestId before retrying",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/raids/{raidId}/entry/cancel": {
+      "post": {
+        "operationId": "cancelRaidEntry",
+        "description": "Cancel only the authenticated player's specified Reserved entry. Same-key retries replay; cancelling an already Cancelled entry also succeeds. Does not touch another/newer reservation.",
+        "parameters": [
+          {
+            "name": "raidId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelRaidRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Current reservation or stored result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RaidReservation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request; a transport-level 400 may have no JSON body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid/expired session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entry/result not found for this player",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "AlreadyMatching, RequestPayloadMismatch or EntryNotCancelable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; check the same requestId before retrying",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/raids/requests/{requestId}": {
+      "get": {
+        "operationId": "raidRequestResult",
+        "description": "Replay the original response/status for this player+requestId. A 404 RequestNotRecorded does not prove an in-flight request failed.",
+        "parameters": [
+          {
+            "name": "requestId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current reservation or stored result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RaidReservation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Malformed request; a transport-level 400 may have no JSON body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid/expired session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entry/result not found for this player",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "AlreadyMatching, RequestPayloadMismatch or EntryNotCancelable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; check the same requestId before retrying",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Stored reservation result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RaidReservation"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/players/me": {
+      "get": {
+        "operationId": "currentPlayerData",
+        "description": "Authenticated own-player aggregate. Persisted sections use the inventory/matching player lock. Experience/revisions are decimal strings. Crafting contains only active/unclaimed jobs; ReadyToClaim is calculated from server UTC without granting items. Login describes this token, not online presence. Party and raid assignment are reserved for future trusted server workflows; a Reserved matching entry is not an active raid. Read-only: there is no client snapshot/progression overwrite endpoint.",
+        "responses": {
+          "200": {
+            "description": "Own player data, no password/token hashes or raw auth token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerData"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid/expired session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Player not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; check the same requestId before retrying",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "Session": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Opaque login session; not JWT. Lost on API restart; never put in a Travel URL."
+      }
+    },
+    "schemas": {
+      "Cell": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "x": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "y": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": [
+          "x",
+          "y"
+        ]
+      },
+      "Location": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "Grid",
+              "EquipmentSlot"
+            ]
+          },
+          "containerId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "gridIndex": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": -1
+          },
+          "cellPosition": {
+            "$ref": "#/components/schemas/Cell"
+          },
+          "rotated": {
+            "type": "boolean"
+          },
+          "slotTag": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "description": "Grid requires containerId, gridIndex >= 0, cellPosition >= 0, and an empty slotTag. EquipmentSlot requires slotTag, null containerId, gridIndex=-1, cellPosition omitted or (0,0), and rotated=false. Grid coordinates have a top-left origin."
+      },
+      "ScopeRevision": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "scopeId": {
+            "type": "string",
+            "enum": [
+              "persistent:self"
+            ]
+          },
+          "revision": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "description": "int64 encoded as a decimal string"
+          }
+        },
+        "required": [
+          "scopeId",
+          "revision"
+        ]
+      },
+      "LoginRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "userId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "password": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "format": "password"
+          }
+        },
+        "required": [
+          "userId",
+          "password"
+        ]
+      },
+      "LoginResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "playerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string",
+            "minLength": 64,
+            "maxLength": 64
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "playerId",
+          "userId",
+          "token",
+          "expiresAt"
+        ]
+      },
+      "ApiError": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "errorCode": {
+            "type": "string"
+          },
+          "retryable": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "errorCode",
+          "retryable"
+        ]
+      },
+      "InventoryCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "requestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "operation": {
+            "type": "string",
+            "enum": [
+              "Move",
+              "Rotate",
+              "Equip",
+              "Unequip",
+              "Swap",
+              "Merge",
+              "Split"
+            ]
+          },
+          "itemId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "source": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "destination": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "expectedRevisions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScopeRevision"
+            },
+            "minItems": 1,
+            "maxItems": 1
+          },
+          "definitionVersion": {
+            "type": "string"
+          },
+          "targetItemId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true,
+            "minimum": 1
+          }
+        },
+        "required": [
+          "requestId",
+          "operation",
+          "itemId",
+          "source",
+          "destination",
+          "expectedRevisions",
+          "definitionVersion"
+        ]
+      },
+      "Item": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "itemId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "definitionId": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1
+          },
+          "maxDurability": {
+            "type": "number",
+            "format": "double",
+            "minimum": 0
+          },
+          "currentDurability": {
+            "type": "number",
+            "format": "double",
+            "minimum": 0
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          }
+        },
+        "required": [
+          "itemId",
+          "definitionId",
+          "quantity",
+          "maxDurability",
+          "currentDurability",
+          "location"
+        ]
+      },
+      "Grid": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "width": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1
+          },
+          "height": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "width",
+          "height"
+        ]
+      },
+      "Container": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "containerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ownerItemId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "layoutId": {
+            "type": "string"
+          },
+          "storageTag": {
+            "type": "string"
+          },
+          "level": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isAccessible": {
+            "type": "boolean"
+          },
+          "grids": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Grid"
+            }
+          }
+        },
+        "required": [
+          "containerId",
+          "ownerItemId",
+          "layoutId",
+          "storageTag",
+          "level",
+          "isAccessible",
+          "grids"
+        ]
+      },
+      "Slot": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "slotTag": {
+            "type": "string"
+          },
+          "itemId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "required": [
+          "slotTag",
+          "itemId"
+        ]
+      },
+      "Snapshot": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "schemaVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "definitionVersion": {
+            "type": "string"
+          },
+          "rulesVersion": {
+            "type": "string"
+          },
+          "inventoryScope": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "description": "int64 encoded as a decimal string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            }
+          },
+          "containers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Container"
+            }
+          },
+          "slots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Slot"
+            }
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "definitionVersion",
+          "rulesVersion",
+          "inventoryScope",
+          "revision",
+          "items",
+          "containers",
+          "slots"
+        ]
+      },
+      "ScopeChange": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "scopeId": {
+            "type": "string"
+          },
+          "baseRevision": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "description": "int64 encoded as a decimal string"
+          },
+          "newRevision": {
+            "type": "string",
+            "pattern": "^[1-9][0-9]*$",
+            "description": "int64 encoded as a decimal string"
+          },
+          "addedItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            }
+          },
+          "updatedItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Item"
+            }
+          },
+          "removedItemIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "containerChanges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Container"
+            }
+          },
+          "slotChanges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Slot"
+            }
+          }
+        },
+        "required": [
+          "scopeId",
+          "baseRevision",
+          "newRevision",
+          "addedItems",
+          "updatedItems",
+          "removedItemIds",
+          "containerChanges",
+          "slotChanges"
+        ]
+      },
+      "Delta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "scopeChanges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScopeChange"
+            }
+          }
+        },
+        "required": [
+          "transactionId",
+          "scopeChanges"
+        ]
+      },
+      "OperationResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "requestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Applied",
+              "Rejected"
+            ]
+          },
+          "errorCode": {
+            "type": "string",
+            "nullable": true
+          },
+          "retryable": {
+            "type": "boolean"
+          },
+          "baseRevisions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScopeRevision"
+            }
+          },
+          "newRevisions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScopeRevision"
+            }
+          },
+          "delta": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/Delta"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "requestId",
+          "status",
+          "errorCode",
+          "retryable",
+          "baseRevisions",
+          "newRevisions",
+          "delta"
+        ]
+      },
+      "Definitions": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "definitionVersion": {
+            "type": "string"
+          },
+          "manifest": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "schemaVersion": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "rulesVersion": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "displayName": {
+                      "type": "string"
+                    },
+                    "categoryTag": {
+                      "type": "string"
+                    },
+                    "itemTags": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "width": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "height": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "maxStack": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "itemLevel": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "maxDurability": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "displayName",
+                    "categoryTag",
+                    "itemTags",
+                    "width",
+                    "height",
+                    "maxStack",
+                    "itemLevel",
+                    "maxDurability"
+                  ]
+                }
+              },
+              "layouts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "grids": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Grid"
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "grids"
+                  ]
+                }
+              },
+              "slots": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "tag": {
+                      "type": "string"
+                    },
+                    "allowedCategories": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "excludedCategories": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "tag",
+                    "allowedCategories",
+                    "excludedCategories"
+                  ]
+                }
+              },
+              "storageRules": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "tag": {
+                      "type": "string"
+                    },
+                    "allowAnyItem": {
+                      "type": "boolean"
+                    },
+                    "allowedTags": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "tag",
+                    "allowAnyItem",
+                    "allowedTags"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "schemaVersion",
+              "rulesVersion",
+              "source",
+              "items",
+              "layouts",
+              "slots",
+              "storageRules"
+            ]
+          }
+        },
+        "required": [
+          "definitionVersion",
+          "manifest"
+        ]
+      },
+      "ReserveRaidRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "requestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "mapId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "requestId",
+          "mapId"
+        ]
+      },
+      "CancelRaidRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "requestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "entryId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "requestId",
+          "entryId"
+        ]
+      },
+      "RaidReservation": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "raidId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "entryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "mapId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Reserved",
+              "Cancelled"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "raidId",
+          "entryId",
+          "mapId",
+          "status",
+          "createdAt"
+        ]
+      },
+      "PlayerProfile": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "playerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nickname": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "level": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "experience": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "description": "Nonnegative int64, decimal string"
+          },
+          "avatarId": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 128
+          },
+          "dogtagImageId": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "playerId",
+          "nickname",
+          "level",
+          "experience",
+          "avatarId",
+          "dogtagImageId"
+        ]
+      },
+      "BlackSite": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "stashLevel": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "commandCenterLevel": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "trainingCenterLevel": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "firingRangeLevel": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "divingCenterLevel": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "collectionRoomLevel": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "decontaminationRoomLevel": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "stashLevel",
+          "commandCenterLevel",
+          "trainingCenterLevel",
+          "firingRangeLevel",
+          "divingCenterLevel",
+          "collectionRoomLevel",
+          "decontaminationRoomLevel"
+        ]
+      },
+      "CraftingJob": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "facilityId": {
+            "type": "string"
+          },
+          "recipeId": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completesAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "InProgress",
+              "ReadyToClaim",
+              "Claimed",
+              "Cancelled"
+            ]
+          }
+        },
+        "required": [
+          "jobId",
+          "facilityId",
+          "recipeId",
+          "quantity",
+          "startedAt",
+          "completesAt",
+          "status"
+        ]
+      },
+      "LoginSession": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isLoggedIn": {
+            "type": "boolean"
+          },
+          "loggedInAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastSeenAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "isLoggedIn",
+          "loggedInAt",
+          "expiresAt",
+          "lastSeenAt"
+        ]
+      },
+      "MatchingRuntime": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "Idle",
+              "Matching"
+            ]
+          },
+          "reservation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RaidReservation"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "status",
+          "reservation"
+        ]
+      },
+      "RaidRuntime": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "None",
+              "Preparing",
+              "Joining",
+              "InRaid",
+              "Finished"
+            ]
+          },
+          "raidId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "required": [
+          "status",
+          "raidId"
+        ]
+      },
+      "PlayerRuntime": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "login": {
+            "$ref": "#/components/schemas/LoginSession"
+          },
+          "currentPartyId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "matching": {
+            "$ref": "#/components/schemas/MatchingRuntime"
+          },
+          "raid": {
+            "$ref": "#/components/schemas/RaidRuntime"
+          }
+        },
+        "required": [
+          "login",
+          "currentPartyId",
+          "matching",
+          "raid"
+        ]
+      },
+      "PlayerData": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "schemaVersion": {
+            "type": "integer",
+            "format": "int32",
+            "enum": [
+              1
+            ]
+          },
+          "profile": {
+            "$ref": "#/components/schemas/PlayerProfile"
+          },
+          "blackSite": {
+            "$ref": "#/components/schemas/BlackSite"
+          },
+          "crafting": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CraftingJob"
+            }
+          },
+          "inventory": {
+            "$ref": "#/components/schemas/Snapshot"
+          },
+          "runtime": {
+            "$ref": "#/components/schemas/PlayerRuntime"
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "profile",
+          "blackSite",
+          "crafting",
+          "inventory",
+          "runtime"
+        ]
+      }
+    }
+  }
+}

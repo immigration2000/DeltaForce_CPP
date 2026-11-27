@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DeltaForce.Domain/DeltaForce.Domain.csproj" />
+    <Project Path="src/DeltaForce.Application/DeltaForce.Application.csproj" />
+    <Project Path="src/DeltaForce.Infrastructure/DeltaForce.Infrastructure.csproj" />
+    <Project Path="src/DeltaForce.Api/DeltaForce.Api.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/DeltaForce.Domain.Tests/DeltaForce.Domain.Tests.csproj" />
+    <Project Path="tests/DeltaForce.IntegrationChecks/DeltaForce.IntegrationChecks.csproj" />
+  </Folder>
+</Solution>

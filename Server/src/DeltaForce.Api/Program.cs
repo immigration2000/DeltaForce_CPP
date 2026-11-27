@@ -30,7 +30,9 @@ builder.Services.AddSingleton(catalog);
 builder.Services.AddSingleton<InventoryEngine>();
 builder.Services.AddDbContext<InventoryDbContext>(o => o.UseSqlServer(
     builder.Configuration.GetConnectionString("Inventory") ?? throw new InvalidOperationException("Inventory connection is required")));
-builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<InventoryService>();
+builder.Services.AddScoped<IInventoryService>(s => s.GetRequiredService<InventoryService>());
+builder.Services.AddScoped<IPlayerDataService, PlayerDataService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddSingleton(new RaidMaps(builder.Configuration.GetSection("Raid:MapIds").Get<string[]>() ?? ["beacon"]));
 builder.Services.AddScoped<IRaidReservationService, RaidReservationService>();
@@ -70,6 +72,14 @@ app.MapGet("/health/ready", async (InventoryDbContext db, CancellationToken ct) 
 app.MapGet("/openapi/v1.json", () => Results.File(Path.Combine(AppContext.BaseDirectory, "Contracts", "backend.v1.json"), "application/json"));
 var api = app.MapGroup("/api/v1");
 api.MapRaidReservations();
+api.MapGet("/players/me", async (HttpContext context, IPlayerDataService players, SessionStore sessions, CancellationToken ct) =>
+{
+    context.Response.Headers.CacheControl = "no-store";
+    var session = sessions.Describe(SessionAuthenticationHandler.ReadToken(context.Request));
+    if (session == null) return Results.Json(new ApiError("SessionExpired"), statusCode: 401);
+    var data = await players.GetAsync(PlayerId(context.User), session, ct);
+    return data == null ? Results.NotFound(new ApiError("PlayerNotFound")) : Results.Ok(data);
+}).RequireAuthorization();
 api.MapPost("/auth/login", async (LoginRequest request, IAccountService accounts, SessionStore sessions, CancellationToken ct) =>
 {
     if (string.IsNullOrWhiteSpace(request.UserId) || request.UserId.Length > 64 || string.IsNullOrEmpty(request.Password) || request.Password.Length > 128)

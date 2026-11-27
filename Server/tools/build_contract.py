@@ -102,7 +102,28 @@ paths["/api/v1/raids/requests/{requestId}"] = {"get": {"operationId": "raidReque
     "description": "Replay the original response/status for this player+requestId. A 404 RequestNotRecorded does not prove an in-flight request failed.",
     "parameters": [{"name": "requestId", "in": "path", "required": True, "schema": guid}],
     "responses": {**raid_responses, "201": response(ref("RaidReservation"), "Stored reservation result")}}}
-spec = {"openapi": "3.0.3", "info": {"title": "DeltaForce Backend", "version": "1.1.0",
+date_time = {"type": "string", "format": "date-time"}
+schemas["PlayerProfile"] = obj({"playerId": guid, "nickname": {**string, "maxLength": 64},
+    "level": {**integer, "minimum": 0}, "experience": {"type": "string", "pattern": "^(0|[1-9][0-9]*)$", "description": "Nonnegative int64, decimal string"},
+    "avatarId": {**string, "nullable": True, "maxLength": 128}, "dogtagImageId": {**string, "nullable": True, "maxLength": 128}})
+schemas["BlackSite"] = obj({name: {**integer, "minimum": 0} for name in
+    ("stashLevel", "commandCenterLevel", "trainingCenterLevel", "firingRangeLevel", "divingCenterLevel", "collectionRoomLevel", "decontaminationRoomLevel")})
+schemas["CraftingJob"] = obj({"jobId": guid, "facilityId": string, "recipeId": string,
+    "quantity": {**integer, "minimum": 1}, "startedAt": date_time, "completesAt": date_time,
+    "status": {"type": "string", "enum": ["InProgress", "ReadyToClaim", "Claimed", "Cancelled"]}})
+schemas["LoginSession"] = obj({"isLoggedIn": boolean, "loggedInAt": date_time, "expiresAt": date_time, "lastSeenAt": date_time})
+schemas["MatchingRuntime"] = obj({"status": {"type": "string", "enum": ["Idle", "Matching"]},
+    "reservation": {"allOf": [ref("RaidReservation")], "nullable": True}})
+schemas["RaidRuntime"] = obj({"status": {"type": "string", "enum": ["None", "Preparing", "Joining", "InRaid", "Finished"]}, "raidId": nullable_guid})
+schemas["PlayerRuntime"] = obj({"login": ref("LoginSession"), "currentPartyId": nullable_guid,
+    "matching": ref("MatchingRuntime"), "raid": ref("RaidRuntime")})
+schemas["PlayerData"] = obj({"schemaVersion": {**integer, "enum": [1]}, "profile": ref("PlayerProfile"),
+    "blackSite": ref("BlackSite"), "crafting": array(ref("CraftingJob")), "inventory": ref("Snapshot"), "runtime": ref("PlayerRuntime")})
+paths["/api/v1/players/me"] = {"get": {"operationId": "currentPlayerData",
+    "description": "Authenticated own-player aggregate. Persisted sections use the inventory/matching player lock. Experience/revisions are decimal strings. Crafting contains only active/unclaimed jobs; ReadyToClaim is calculated from server UTC without granting items. Login describes this token, not online presence. Party and raid assignment are reserved for future trusted server workflows; a Reserved matching entry is not an active raid. Read-only: there is no client snapshot/progression overwrite endpoint.",
+    "responses": {"200": response(ref("PlayerData"), "Own player data, no password/token hashes or raw auth token"),
+        "401": errors["401"], "404": response(ref("ApiError"), "Player not found"), "503": errors["503"]}}}
+spec = {"openapi": "3.0.3", "info": {"title": "DeltaForce Backend", "version": "1.2.0",
     "description": "M1 authoritative lobby backend. Contracts/README.md contains integration rules and boundaries."},
     "servers": [{"url": "http://127.0.0.1:5099"}], "security": [{"Session": []}], "paths": paths,
     "components": {"securitySchemes": {"Session": {"type": "http", "scheme": "bearer", "description": "Opaque login session; not JWT. Lost on API restart; never put in a Travel URL."}}, "schemas": schemas}}
@@ -126,6 +147,9 @@ collection = {
             'pm.collectionVariables.set("token", pm.response.json().token);'], {"userId": "{{userId}}", "password": "{{password}}"}),
         request("Inventory", "GET", "/api/v1/inventory", ['pm.test("snapshot success", () => pm.response.to.have.status(200));',
             'pm.test("versioned authoritative snapshot", () => { const b=pm.response.json(); pm.expect(b.revision).to.match(/^[1-9][0-9]*$/); pm.expect(b.definitionVersion).to.match(/^sha256:[a-f0-9]{64}$/); pm.expect(b.inventoryScope).to.eql("persistent:self"); });'], auth=True),
+        request("Own player data", "GET", "/api/v1/players/me", [
+            'pm.test("own player aggregate", () => { pm.response.to.have.status(200); const b=pm.response.json(); pm.expect(b.schemaVersion).to.eql(1); pm.expect(b.profile.playerId).to.match(/^[a-f0-9-]{36}$/); pm.expect(b.profile.experience).to.match(/^(0|[1-9][0-9]*)$/); pm.expect(b.blackSite).to.have.property("stashLevel"); pm.expect(b.inventory.inventoryScope).to.eql("persistent:self"); pm.expect(b.runtime.login.isLoggedIn).to.eql(true); });',
+            'pm.test("no credentials in player data", () => { const text=pm.response.text(); pm.expect(text).not.to.include("passwordHash"); pm.expect(text).not.to.include("\\\"token\\\""); });'], auth=True),
         request("Anonymous denied", "GET", "/api/v1/inventory", ['pm.test("no anonymous inventory", () => pm.response.to.have.status(401));']),
         request("Logout", "POST", "/api/v1/auth/logout", ['pm.test("session revoked", () => pm.response.to.have.status(204));'], auth=True),
         request("Revoked token denied", "GET", "/api/v1/inventory", ['pm.test("revoked token rejected", () => pm.response.to.have.status(401));'], auth=True),

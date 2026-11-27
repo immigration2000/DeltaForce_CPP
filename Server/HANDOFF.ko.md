@@ -72,6 +72,19 @@
 - 개발 API는 127.0.0.1:5099에서 관리형 background 실행 중이다. PID와 로그는 Server/artifacts에 있으며 Stop-Server.ps1로 종료한다. demo/demo2 비밀번호는 1234.
 - 실제 DS 배정·입장 commit·티켓·ClientTravel은 후속이다. 현재 자동 Matched 전환은 없다.
 
+## 플레이어 데이터 추가 완료
+
+- API v1.2.0 `GET /api/v1/players/me`: profile / blackSite / crafting / inventory / runtime. 모든 조회는 인증된 본인 계정으로 제한한다.
+- Players에 Nickname, Level, Experience, AvatarId, DogtagImageId 추가. BlackSites(시설 7종), CraftingJobs(제작 시각·상태·수령 기록), PlayerRuntime(현재 파티/레이드 참조) 테이블 추가.
+- Migration `20261127074322_PlayerData`는 기존 UserId를 닉네임으로 채우고 기존 메인 창고 레벨을 보존하여 새 시설/런타임 행을 만든다. 새 demo 계정에도 해당 행을 생성한다. 기존 계정 재시드 시 프로필·시설·제작·인벤토리를 초기화하지 않는다.
+- 경험치는 int64 문자열. 아바타/독택은 이미지 자체가 아닌 nullable ID. 새 계정의 진행도는 0, 파티/레이드 참조는 null. 로그인 bool을 영구 저장하지 않고 요청 토큰의 유효성과 세션 시각을 반환한다.
+- 통합 조회는 기존 인벤토리·매칭과 같은 플레이어 UPDLOCK/HOLDLOCK transaction 사용. 아이템 GUID/로드아웃 중복 없음. 비밀번호/토큰 해시와 원문 토큰을 응답하지 않으며 no-store를 설정한다.
+- 제작은 현재 데이터 저장/조회 기반만 구현했다. InProgress의 완료 예정 UTC 시각이 지나면 ReadyToClaim을 표시하되 조회로 아이템을 지급하거나 DB 상태를 변경하지 않는다. Claimed/Cancelled 작업은 활성 제작 목록에서 제외한다. 시작·취소·수령·레시피/재료/보상 처리는 후속이다.
+- CurrentPartyId, RaidStatus/RaidId는 미래 서버 전용 수명 주기에 사용할 저장 자리다. 파티 초대·랜덤 분대·실제 레이드 배정/진행/정산은 아직 없다. 기존 Reserved 예약을 실제 InRaid 상태로 바꾸지 않는다.
+- Release 전체 빌드 경고/오류 0. 도메인 10개, 실제 MSSQL/HTTP 151개, Postman 11요청/14assertion 통과. 구 스키마 계정 이관, 타인 데이터 격리, int64 경험치, 제작 완료 시각, SQL 제약, 서버 재시작/비밀번호 재시드 보존 검증. 모델 pending 없음, OpenAPI syntax lint 문제 없음. Postman CLI는 status 명령을 지원하지 않으며 로컬 실행은 로그인 없이 통과했다.
+- 다음: 기능 클라이언트에서 players/me를 호출하여 FPlayerData에 PlayerId·닉네임·레벨·시설 등을 반영하고, 기존 창고 초기화가 시설 기본값으로 서버 컨테이너 레벨을 덮어쓰지 않도록 정리한다. 이번 작업은 C# 백엔드만 수정하여 UE 솔루션 재생성/빌드를 요구하지 않는다.
+- 실제 개발 DB에도 migration을 적용하고 5099 API를 재시작했다. demo/1234로 players/me 조회와 OpenAPI 1.2.0을 확인했다. 적용 전후 인벤토리 전체 JSON이 동일하고 revision=1, 아이템 7개를 보존했다. 토큰 없는 실제 응답 예시는 gitignore 대상 Server/artifacts/player-data.sample.json에 있다. 재시작으로 기존 세션은 만료되므로 클라이언트에서 다시 로그인한다.
+
 ## 기획 기준
 
 - 전체 아키텍처: https://app.notion.com/p/42506cd277668178bf94f818f5c22aee

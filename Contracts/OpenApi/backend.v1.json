@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "DeltaForce Backend",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "M1 authoritative lobby backend. Contracts/README.md contains integration rules and boundaries."
   },
   "servers": [
@@ -872,6 +872,54 @@
           }
         }
       }
+    },
+    "/api/v1/players/me": {
+      "get": {
+        "operationId": "currentPlayerData",
+        "description": "Authenticated own-player aggregate. Persisted sections use the inventory/matching player lock. Experience/revisions are decimal strings. Crafting contains only active/unclaimed jobs; ReadyToClaim is calculated from server UTC without granting items. Login describes this token, not online presence. Party and raid assignment are reserved for future trusted server workflows; a Reserved matching entry is not an active raid. Read-only: there is no client snapshot/progression overwrite endpoint.",
+        "responses": {
+          "200": {
+            "description": "Own player data, no password/token hashes or raw auth token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlayerData"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid/expired session",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Player not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Dependency unavailable; check the same requestId before retrying",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1631,6 +1679,287 @@
           "mapId",
           "status",
           "createdAt"
+        ]
+      },
+      "PlayerProfile": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "playerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "nickname": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "level": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "experience": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]*)$",
+            "description": "Nonnegative int64, decimal string"
+          },
+          "avatarId": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 128
+          },
+          "dogtagImageId": {
+            "type": "string",
+            "nullable": true,
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "playerId",
+          "nickname",
+          "level",
+          "experience",
+          "avatarId",
+          "dogtagImageId"
+        ]
+      },
+      "BlackSite": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "stashLevel": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "commandCenterLevel": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "trainingCenterLevel": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "firingRangeLevel": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "divingCenterLevel": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "collectionRoomLevel": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "decontaminationRoomLevel": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "stashLevel",
+          "commandCenterLevel",
+          "trainingCenterLevel",
+          "firingRangeLevel",
+          "divingCenterLevel",
+          "collectionRoomLevel",
+          "decontaminationRoomLevel"
+        ]
+      },
+      "CraftingJob": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "facilityId": {
+            "type": "string"
+          },
+          "recipeId": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completesAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "InProgress",
+              "ReadyToClaim",
+              "Claimed",
+              "Cancelled"
+            ]
+          }
+        },
+        "required": [
+          "jobId",
+          "facilityId",
+          "recipeId",
+          "quantity",
+          "startedAt",
+          "completesAt",
+          "status"
+        ]
+      },
+      "LoginSession": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "isLoggedIn": {
+            "type": "boolean"
+          },
+          "loggedInAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastSeenAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "isLoggedIn",
+          "loggedInAt",
+          "expiresAt",
+          "lastSeenAt"
+        ]
+      },
+      "MatchingRuntime": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "Idle",
+              "Matching"
+            ]
+          },
+          "reservation": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RaidReservation"
+              }
+            ],
+            "nullable": true
+          }
+        },
+        "required": [
+          "status",
+          "reservation"
+        ]
+      },
+      "RaidRuntime": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "None",
+              "Preparing",
+              "Joining",
+              "InRaid",
+              "Finished"
+            ]
+          },
+          "raidId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          }
+        },
+        "required": [
+          "status",
+          "raidId"
+        ]
+      },
+      "PlayerRuntime": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "login": {
+            "$ref": "#/components/schemas/LoginSession"
+          },
+          "currentPartyId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "matching": {
+            "$ref": "#/components/schemas/MatchingRuntime"
+          },
+          "raid": {
+            "$ref": "#/components/schemas/RaidRuntime"
+          }
+        },
+        "required": [
+          "login",
+          "currentPartyId",
+          "matching",
+          "raid"
+        ]
+      },
+      "PlayerData": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "schemaVersion": {
+            "type": "integer",
+            "format": "int32",
+            "enum": [
+              1
+            ]
+          },
+          "profile": {
+            "$ref": "#/components/schemas/PlayerProfile"
+          },
+          "blackSite": {
+            "$ref": "#/components/schemas/BlackSite"
+          },
+          "crafting": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CraftingJob"
+            }
+          },
+          "inventory": {
+            "$ref": "#/components/schemas/Snapshot"
+          },
+          "runtime": {
+            "$ref": "#/components/schemas/PlayerRuntime"
+          }
+        },
+        "required": [
+          "schemaVersion",
+          "profile",
+          "blackSite",
+          "crafting",
+          "inventory",
+          "runtime"
         ]
       }
     }

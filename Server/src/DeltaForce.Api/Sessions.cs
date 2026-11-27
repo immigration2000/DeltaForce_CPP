@@ -11,15 +11,22 @@ namespace DeltaForce.Api;
 
 public sealed class SessionStore
 {
-    private sealed record Entry(AuthenticatedPlayer Player, DateTimeOffset ExpiresAt);
+    private sealed class Entry(AuthenticatedPlayer player, DateTimeOffset loggedInAt, DateTimeOffset expiresAt)
+    {
+        public AuthenticatedPlayer Player { get; } = player;
+        public DateTimeOffset LoggedInAt { get; } = loggedInAt;
+        public DateTimeOffset ExpiresAt { get; } = expiresAt;
+        public long LastSeenTicks = loggedInAt.UtcTicks;
+    }
     private readonly ConcurrentDictionary<string, Entry> sessions = new();
     private static string Hash(string token) => Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(token)));
     public LoginResponse Create(AuthenticatedPlayer player)
     {
         foreach (var pair in sessions.Where(p => p.Value.ExpiresAt <= DateTimeOffset.UtcNow)) sessions.TryRemove(pair.Key, out _);
         string token = Convert.ToHexStringLower(RandomNumberGenerator.GetBytes(32));
-        var expires = DateTimeOffset.UtcNow.AddHours(8);
-        sessions[Hash(token)] = new(player, expires);
+        var now = DateTimeOffset.UtcNow;
+        var expires = now.AddHours(8);
+        sessions[Hash(token)] = new(player, now, expires);
         return new(player.PlayerId, player.UserId, token, expires);
     }
     public AuthenticatedPlayer? Find(string token)
@@ -27,11 +34,21 @@ public sealed class SessionStore
         if (token.Length != 64) return null;
         string key = Hash(token);
         if (!sessions.TryGetValue(key, out var entry)) return null;
-        if (entry.ExpiresAt > DateTimeOffset.UtcNow) return entry.Player;
+        if (entry.ExpiresAt > DateTimeOffset.UtcNow)
+        {
+            Interlocked.Exchange(ref entry.LastSeenTicks, DateTimeOffset.UtcNow.UtcTicks);
+            return entry.Player;
+        }
         sessions.TryRemove(key, out _);
         return null;
     }
     public void Remove(string token) => sessions.TryRemove(Hash(token), out _);
+    public LoginSessionView? Describe(string token)
+    {
+        if (!sessions.TryGetValue(Hash(token), out var entry) || entry.ExpiresAt <= DateTimeOffset.UtcNow) return null;
+        return new(true, entry.LoggedInAt, entry.ExpiresAt,
+            new DateTimeOffset(Interlocked.Read(ref entry.LastSeenTicks), TimeSpan.Zero));
+    }
 }
 
 public sealed class SessionAuthenticationHandler(IOptionsMonitor<AuthenticationSchemeOptions> options,

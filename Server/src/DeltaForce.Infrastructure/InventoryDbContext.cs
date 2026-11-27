@@ -8,6 +8,11 @@ public sealed class PlayerRow
     public Guid PlayerId { get; set; }
     public string UserId { get; set; } = "";
     public string PasswordHash { get; set; } = "";
+    public string Nickname { get; set; } = "";
+    public int Level { get; set; }
+    public long Experience { get; set; }
+    public string? AvatarId { get; set; }
+    public string? DogtagImageId { get; set; }
     public long Revision { get; set; } = 1;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }
@@ -75,6 +80,9 @@ public sealed class InventoryDbContext(DbContextOptions<InventoryDbContext> opti
     public DbSet<RetiredItemRow> RetiredItems => Set<RetiredItemRow>();
     public DbSet<RaidEntryRow> RaidEntries => Set<RaidEntryRow>();
     public DbSet<RaidRequestRow> RaidRequests => Set<RaidRequestRow>();
+    public DbSet<BlackSiteRow> BlackSites => Set<BlackSiteRow>();
+    public DbSet<CraftingJobRow> CraftingJobs => Set<CraftingJobRow>();
+    public DbSet<PlayerRuntimeRow> PlayerRuntime => Set<PlayerRuntimeRow>();
 
     protected override void OnModelCreating(ModelBuilder model)
     {
@@ -85,6 +93,11 @@ public sealed class InventoryDbContext(DbContextOptions<InventoryDbContext> opti
         player.HasIndex(p => p.UserId).IsUnique();
         player.Property(p => p.PasswordHash).HasMaxLength(512);
         player.Property(p => p.Revision).IsConcurrencyToken();
+        player.Property(p => p.Nickname).HasMaxLength(64);
+        player.Property(p => p.AvatarId).HasMaxLength(128);
+        player.Property(p => p.DogtagImageId).HasMaxLength(128);
+        player.ToTable("Players", t => t.HasCheckConstraint("CK_Players_Progression", "[Level] >= 0 AND [Experience] >= 0"));
+        PlayerDataModel.Configure(model);
         var item = model.Entity<ItemRow>();
         item.ToTable("ItemInstances", t => t.HasCheckConstraint("CK_Items_Values", "[Quantity] > 0 AND [CurrentDurability] >= 0"));
         item.HasKey(i => i.ItemId);

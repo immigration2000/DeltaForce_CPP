@@ -1,5 +1,7 @@
 # Backend v1 / future UE C++ boundary
 
+API v1.2 adds `GET /api/v1/players/me`: `profile`, `blackSite`, active/unclaimed `crafting`, the existing `inventory` snapshot, and `runtime`. `profile.experience` is a nonnegative int64 decimal string. Cosmetic fields are nullable asset identifiers. Login metadata describes the current token, not presence. Party/raid assignment and crafting execution/claim remain future server workflows. Reserved matchmaking does not imply an active raid. The client cannot upload progression or an aggregate snapshot. Existing login/inventory/reservation responses are unchanged. The functional UE client has not yet adopted this new aggregate endpoint.
+
 `OpenApi/backend.v1.json` is the committed HTTP contract. `Server/tools/build_contract.py` generates it and the small runnable `Postman/lobby.postman_collection.json`. If DTOs change, update the generator and regenerate in the same change. `Definitions/inventory.v1.json` is the immutable server definition manifest. `TestVectors/placement.v1.json` is language-neutral input for both C# and future UE C++ tests.
 
 `.gitattributes` enforces LF for Contracts files so SHA-256 definition versions stay identical across Windows/Linux checkouts.

@@ -22,6 +22,40 @@ namespace DeltaForce.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DeltaForce.Infrastructure.BlackSiteRow", b =>
+                {
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CollectionRoomLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CommandCenterLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DecontaminationRoomLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DivingCenterLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FiringRangeLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StashLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TrainingCenterLevel")
+                        .HasColumnType("int");
+
+                    b.HasKey("PlayerId");
+
+                    b.ToTable("BlackSites", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_BlackSites_Levels", "[StashLevel] >= 0 AND [CommandCenterLevel] >= 0 AND [TrainingCenterLevel] >= 0 AND [FiringRangeLevel] >= 0 AND [DivingCenterLevel] >= 0 AND [CollectionRoomLevel] >= 0 AND [DecontaminationRoomLevel] >= 0");
+                        });
+                });
+
             modelBuilder.Entity("DeltaForce.Infrastructure.ContainerRow", b =>
                 {
                     b.Property<Guid>("ContainerId")
@@ -58,6 +92,54 @@ namespace DeltaForce.Infrastructure.Migrations
                     b.HasIndex("PlayerId", "OwnerItemId");
 
                     b.ToTable("Containers", (string)null);
+                });
+
+            modelBuilder.Entity("DeltaForce.Infrastructure.CraftingJobRow", b =>
+                {
+                    b.Property<Guid>("JobId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset?>("ClaimedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("CompletesAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("FacilityId")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RecipeId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<DateTimeOffset>("StartedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.HasKey("JobId");
+
+                    b.HasIndex("PlayerId", "Status", "CompletesAt");
+
+                    b.ToTable("CraftingJobs", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_CraftingJobs_Status", "([Status] IN (N'InProgress', N'ReadyToClaim', N'Cancelled') AND [ClaimedAt] IS NULL) OR ([Status] = N'Claimed' AND [ClaimedAt] IS NOT NULL AND [ClaimedAt] >= [CompletesAt])");
+
+                            t.HasCheckConstraint("CK_CraftingJobs_Values", "[Quantity] > 0 AND [CompletesAt] >= [StartedAt]");
+                        });
                 });
 
             modelBuilder.Entity("DeltaForce.Infrastructure.ItemRow", b =>
@@ -172,6 +254,25 @@ namespace DeltaForce.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("AvatarId")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("DogtagImageId")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<long>("Experience")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nickname")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasMaxLength(512)
@@ -197,7 +298,36 @@ namespace DeltaForce.Infrastructure.Migrations
 
                     b.ToTable("Players", null, t =>
                         {
+                            t.HasCheckConstraint("CK_Players_Progression", "[Level] >= 0 AND [Experience] >= 0");
+
                             t.HasCheckConstraint("CK_Players_Revision", "[Revision] >= 1");
+                        });
+                });
+
+            modelBuilder.Entity("DeltaForce.Infrastructure.PlayerRuntimeRow", b =>
+                {
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CurrentPartyId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("RaidId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RaidStatus")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("PlayerId");
+
+                    b.ToTable("PlayerRuntime", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_PlayerRuntime_Raid", "([RaidStatus] = N'None' AND [RaidId] IS NULL) OR ([RaidStatus] IN (N'Preparing', N'Joining', N'InRaid', N'Finished') AND [RaidId] IS NOT NULL)");
                         });
                 });
 
@@ -293,6 +423,15 @@ namespace DeltaForce.Infrastructure.Migrations
                     b.ToTable("RetiredItems", (string)null);
                 });
 
+            modelBuilder.Entity("DeltaForce.Infrastructure.BlackSiteRow", b =>
+                {
+                    b.HasOne("DeltaForce.Infrastructure.PlayerRow", null)
+                        .WithOne()
+                        .HasForeignKey("DeltaForce.Infrastructure.BlackSiteRow", "PlayerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("DeltaForce.Infrastructure.ContainerRow", b =>
                 {
                     b.HasOne("DeltaForce.Infrastructure.PlayerRow", null)
@@ -306,6 +445,15 @@ namespace DeltaForce.Infrastructure.Migrations
                         .HasForeignKey("PlayerId", "OwnerItemId")
                         .HasPrincipalKey("PlayerId", "ItemId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("DeltaForce.Infrastructure.CraftingJobRow", b =>
+                {
+                    b.HasOne("DeltaForce.Infrastructure.PlayerRow", null)
+                        .WithMany()
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DeltaForce.Infrastructure.ItemRow", b =>
@@ -338,6 +486,15 @@ namespace DeltaForce.Infrastructure.Migrations
                     b.HasOne("DeltaForce.Infrastructure.PlayerRow", null)
                         .WithMany()
                         .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DeltaForce.Infrastructure.PlayerRuntimeRow", b =>
+                {
+                    b.HasOne("DeltaForce.Infrastructure.PlayerRow", null)
+                        .WithOne()
+                        .HasForeignKey("DeltaForce.Infrastructure.PlayerRuntimeRow", "PlayerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });

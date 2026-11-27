@@ -119,7 +119,7 @@ public sealed class InventoryService(InventoryDbContext db, DefinitionCatalog ca
         return response;
     }
 
-    private async Task<InventoryState> LoadAsync(Guid playerId, CancellationToken ct)
+    internal async Task<InventoryState> LoadAsync(Guid playerId, CancellationToken ct)
     {
         var items = await db.Items.Include(i => i.Location).Where(i => i.PlayerId == playerId).ToListAsync(ct);
         var containers = await db.Containers.AsNoTracking().Where(c => c.PlayerId == playerId).ToListAsync(ct);

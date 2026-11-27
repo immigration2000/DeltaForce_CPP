@@ -40,11 +40,13 @@ public static class DevelopmentSeeder
                 continue;
             }
             await using var transaction = await db.Database.BeginTransactionAsync(ct);
-            var player = new PlayerRow { PlayerId = Guid.NewGuid(), UserId = userId };
+            var player = new PlayerRow { PlayerId = Guid.NewGuid(), UserId = userId, Nickname = userId };
             player.PasswordHash = hasher.HashPassword(player, password);
             db.Players.Add(player);
             await db.SaveChangesAsync(ct);
             Guid stashId = Guid.NewGuid(), bagId = Guid.NewGuid();
+            db.BlackSites.Add(new() { PlayerId = player.PlayerId });
+            db.PlayerRuntime.Add(new() { PlayerId = player.PlayerId });
             // IDs refer to the existing UE data export, not client-authored definitions.
             var seeds = new InventoryItem[]
             {

@@ -31,6 +31,7 @@ try
 {
     await Sql($"CREATE DATABASE [{database}]", masterConnection);
     created = true;
+    await PlayerDataChecks.PrepareLegacyAsync(connection, text => Sql(text, connection));
     var first = await Start(firstPort, true);
     var second = await Start(secondPort, false);
     using var anonymous = Client(firstPort);
@@ -165,6 +166,7 @@ try
         "equipment swap satisfies SQL unique slots and returns both slot changes");
     Expect(afterEquipmentSwap.Slots.Single(s => s.SlotTag == "Slot.Backpack").ItemId == bag, "equipment state survives unrelated commands");
     var persisted = await Snapshot(a);
+    var playerCheckpoint = await PlayerDataChecks.RunAsync(a, aOtherProcess, b, connection, Expect, text => Sql(text, connection));
     var raidCheckpoint = await RaidChecks.RunAsync(a, aOtherProcess, b, Expect, text => Sql(text, connection));
     await Stop(second); await Stop(first);
     await using (var passwordConnection = new SqlConnection(connection))
@@ -178,6 +180,7 @@ try
     first = await Start(firstPort, true, resetPasswords: true);
     Expect((int)(await a.GetAsync("/api/v1/inventory")).StatusCode == 401, "API restart expires in-memory sessions");
     using var restored = await Login(firstPort, "demo");
+    await PlayerDataChecks.VerifyRestoredAsync(restored, playerCheckpoint, Expect);
     var recoveredEntry = await restored.GetFromJsonAsync<RaidReservation>("/api/v1/raids/current-entry", ContractJson.Options);
     Expect(Same(raidCheckpoint.Reservation, recoveredEntry!), "matching reservation survives API restart and login");
     using var matchingReplay = await restored.GetAsync($"/api/v1/raids/requests/{raidCheckpoint.RequestId}");

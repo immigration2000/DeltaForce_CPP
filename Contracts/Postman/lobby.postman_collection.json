@@ -218,6 +218,31 @@
       ]
     },
     {
+      "name": "Own player data",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/players/me",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"own player aggregate\", () => { pm.response.to.have.status(200); const b=pm.response.json(); pm.expect(b.schemaVersion).to.eql(1); pm.expect(b.profile.playerId).to.match(/^[a-f0-9-]{36}$/); pm.expect(b.profile.experience).to.match(/^(0|[1-9][0-9]*)$/); pm.expect(b.blackSite).to.have.property(\"stashLevel\"); pm.expect(b.inventory.inventoryScope).to.eql(\"persistent:self\"); pm.expect(b.runtime.login.isLoggedIn).to.eql(true); });",
+              "pm.test(\"no credentials in player data\", () => { const text=pm.response.text(); pm.expect(text).not.to.include(\"passwordHash\"); pm.expect(text).not.to.include(\"\\\"token\\\"\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
       "name": "Anonymous denied",
       "request": {
         "method": "GET",

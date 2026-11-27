@@ -2,6 +2,8 @@
 
 `OpenApi/backend.v1.json` is the committed HTTP contract. `Server/tools/build_contract.py` generates it and the small runnable `Postman/lobby.postman_collection.json`. If DTOs change, update the generator and regenerate in the same change. `Definitions/inventory.v1.json` is the immutable server definition manifest. `TestVectors/placement.v1.json` is language-neutral input for both C# and future UE C++ tests.
 
+`.gitattributes` enforces LF for Contracts files so SHA-256 definition versions stay identical across Windows/Linux checkouts.
+
 M1 conventions:
 
 - JSON camelCase is case-sensitive. Unknown request properties and integer enums are rejected.

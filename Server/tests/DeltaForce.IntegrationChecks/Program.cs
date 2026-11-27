@@ -35,10 +35,10 @@ try
     var first = await Start(firstPort, true);
     var second = await Start(secondPort, false);
     using var anonymous = Client(firstPort);
-    Expect((int)(await anonymous.GetAsync("/api/v1/inventory")).StatusCode == 401, "anonymous inventory denied");
-    var wrong = await anonymous.PostAsJsonAsync("/api/v1/auth/login", new LoginRequest("demo", "incorrect-password"), ContractJson.Options);
+    Expect((int)(await anonymous.GetAsync("/api/inventory")).StatusCode == 401, "anonymous inventory denied");
+    var wrong = await anonymous.PostAsJsonAsync("/api/auth/login", new LoginRequest("demo", "incorrect-password"), ContractJson.Options);
     Expect((int)wrong.StatusCode == 401, "wrong password denied");
-    var caseMismatch = await anonymous.PostAsJsonAsync("/api/v1/auth/login", new LoginRequest("DEMO", password), ContractJson.Options);
+    var caseMismatch = await anonymous.PostAsJsonAsync("/api/auth/login", new LoginRequest("DEMO", password), ContractJson.Options);
     Expect((int)caseMismatch.StatusCode == 401, "account ID preserves case");
     using var a = await Login(firstPort, "demo");
     using var aOtherProcess = await Login(secondPort, "demo");
@@ -96,15 +96,15 @@ try
     Expect(Same(failureSnapshot, await Snapshot(a)) && Same(other, await Snapshot(b)), "invalid and foreign requests leave both accounts unchanged");
     var forged = JsonSerializer.SerializeToNode(Command(failureSnapshot, helmet, InventoryLocation.Grid(stash, 6, 20)), ContractJson.Options)!;
     forged["playerId"] = other.InventoryScope;
-    using var forgedResponse = await a.PostAsync("/api/v1/inventory/operations", new StringContent(forged.ToJsonString(), Encoding.UTF8, "application/json"));
+    using var forgedResponse = await a.PostAsync("/api/inventory/operations", new StringContent(forged.ToJsonString(), Encoding.UTF8, "application/json"));
     Expect((int)forgedResponse.StatusCode == 400, "unrecognized owner override rejected");
 
     var replay = await Execute(aOtherProcess, firstMove, 200);
     Expect(Same(firstResponse.Result, replay.Result) && Same(failureSnapshot, await Snapshot(a)), "old successful request replays before revision check across processes");
     await Execute(a, firstMove with { Destination = InventoryLocation.Grid(stash, 4, 8) }, 409, "RequestPayloadMismatch");
-    var lookup = await a.GetFromJsonAsync<OperationResult>($"/api/v1/inventory/operations/{firstMove.RequestId}", ContractJson.Options);
+    var lookup = await a.GetFromJsonAsync<OperationResult>($"/api/inventory/operations/{firstMove.RequestId}", ContractJson.Options);
     Expect(Same(firstResponse.Result, lookup!), "request result can be queried");
-    Expect((int)(await b.GetAsync($"/api/v1/inventory/operations/{firstMove.RequestId}")).StatusCode == 404, "another player cannot read request result");
+    Expect((int)(await b.GetAsync($"/api/inventory/operations/{firstMove.RequestId}")).StatusCode == 404, "another player cannot read request result");
 
     var splitCommand = Command(await Snapshot(a), ammo, InventoryLocation.Grid(stash, 4, 8), OperationKind.Split, quantity: 5);
     var split = await Execute(a, splitCommand, 200);
@@ -120,10 +120,10 @@ try
     await Sql("CREATE TRIGGER [FailOperationInsert] ON [OperationRecords] AFTER INSERT AS BEGIN THROW 51000, 'Injected test failure', 1; END", connection);
     var rollbackBefore = await Snapshot(a);
     var retryAfterRollback = Command(rollbackBefore, helmet, InventoryLocation.Grid(stash, 6, 20));
-    var failedCommit = await a.PostAsJsonAsync("/api/v1/inventory/operations", retryAfterRollback, ContractJson.Options);
+    var failedCommit = await a.PostAsJsonAsync("/api/inventory/operations", retryAfterRollback, ContractJson.Options);
     Expect((int)failedCommit.StatusCode == 503, "injected SQL failure reported as retryable dependency error");
     Expect(Same(rollbackBefore, await Snapshot(a)), "failed commit rolls back location, item and revision");
-    Expect((int)(await a.GetAsync($"/api/v1/inventory/operations/{retryAfterRollback.RequestId}")).StatusCode == 404, "failed transaction leaves no committed request result");
+    Expect((int)(await a.GetAsync($"/api/inventory/operations/{retryAfterRollback.RequestId}")).StatusCode == 404, "failed transaction leaves no committed request result");
     await Sql("DROP TRIGGER [FailOperationInsert]", connection);
     await Execute(aOtherProcess, retryAfterRollback, 200);
 
@@ -135,8 +135,8 @@ try
     var raceBefore = await Snapshot(a);
     var left = Command(raceBefore, helmet, InventoryLocation.Grid(stash, 6, 20));
     var right = Command(raceBefore, helmet, InventoryLocation.Grid(stash, 5, 20));
-    var race = await Task.WhenAll(a.PostAsJsonAsync("/api/v1/inventory/operations", left, ContractJson.Options),
-        aOtherProcess.PostAsJsonAsync("/api/v1/inventory/operations", right, ContractJson.Options));
+    var race = await Task.WhenAll(a.PostAsJsonAsync("/api/inventory/operations", left, ContractJson.Options),
+        aOtherProcess.PostAsJsonAsync("/api/inventory/operations", right, ContractJson.Options));
     Expect(race.Count(r => (int)r.StatusCode == 200) == 1 && race.Count(r => (int)r.StatusCode == 409) == 1,
         "different requests at same revision have one winner across API processes");
     Expect(long.Parse((await Snapshot(a)).Revision) == long.Parse(raceBefore.Revision) + 1, "revision race does not lose or double-write state");
@@ -178,28 +178,28 @@ try
         await resetFixture.ExecuteNonQueryAsync();
     }
     first = await Start(firstPort, true, resetPasswords: true);
-    Expect((int)(await a.GetAsync("/api/v1/inventory")).StatusCode == 401, "API restart expires in-memory sessions");
+    Expect((int)(await a.GetAsync("/api/inventory")).StatusCode == 401, "API restart expires in-memory sessions");
     using var restored = await Login(firstPort, "demo");
     await PlayerDataChecks.VerifyRestoredAsync(restored, playerCheckpoint, Expect);
-    var recoveredEntry = await restored.GetFromJsonAsync<RaidReservation>("/api/v1/raids/current-entry", ContractJson.Options);
+    var recoveredEntry = await restored.GetFromJsonAsync<RaidReservation>("/api/raids/current-entry", ContractJson.Options);
     Expect(Same(raidCheckpoint.Reservation, recoveredEntry!), "matching reservation survives API restart and login");
-    using var matchingReplay = await restored.GetAsync($"/api/v1/raids/requests/{raidCheckpoint.RequestId}");
+    using var matchingReplay = await restored.GetAsync($"/api/raids/requests/{raidCheckpoint.RequestId}");
     Expect((int)matchingReplay.StatusCode == 201 && Same(raidCheckpoint.Reservation,
         (await matchingReplay.Content.ReadFromJsonAsync<RaidReservation>(ContractJson.Options))!), "matching request result survives API restart");
-    using var cancelRecovered = await restored.PostAsJsonAsync($"/api/v1/raids/{recoveredEntry!.RaidId}/entry/cancel",
+    using var cancelRecovered = await restored.PostAsJsonAsync($"/api/raids/{recoveredEntry!.RaidId}/entry/cancel",
         new CancelRaidRequest(Guid.NewGuid(), recoveredEntry.EntryId), ContractJson.Options);
     Expect((int)cancelRecovered.StatusCode == 200, "recovered matching reservation can be cancelled");
     using var restoredOther = await Login(firstPort, "demo2");
     Expect(Same(other, await Snapshot(restoredOther)), "demo2 password reset preserves its inventory and revision");
-    var oldPasswordLogin = await anonymous.PostAsJsonAsync("/api/v1/auth/login", new LoginRequest("demo", "previous-demo-password"), ContractJson.Options);
+    var oldPasswordLogin = await anonymous.PostAsJsonAsync("/api/auth/login", new LoginRequest("demo", "previous-demo-password"), ContractJson.Options);
     Expect((int)oldPasswordLogin.StatusCode == 401, "previous demo password rejected after explicit reset to 1234");
     Expect(Same(persisted, await Snapshot(restored)), "API process restart and re-login restore exact inventory");
     var durableReplay = await Execute(restored, firstMove, 200);
     Expect(Same(durableReplay.Result, firstResponse.Result), "request results survive API process restart");
     using var anotherSession = await Login(firstPort, "demo");
-    Expect((int)(await restored.PostAsync("/api/v1/auth/logout", null)).StatusCode == 204, "logout succeeds after immediately saved operations");
-    Expect((int)(await restored.GetAsync("/api/v1/inventory")).StatusCode == 401, "logout invalidates used session");
-    Expect((int)(await anotherSession.GetAsync("/api/v1/inventory")).StatusCode == 200, "logout preserves other sessions");
+    Expect((int)(await restored.PostAsync("/api/auth/logout", null)).StatusCode == 204, "logout succeeds after immediately saved operations");
+    Expect((int)(await restored.GetAsync("/api/inventory")).StatusCode == 401, "logout invalidates used session");
+    Expect((int)(await anotherSession.GetAsync("/api/inventory")).StatusCode == 200, "logout preserves other sessions");
     using var relogin = await Login(firstPort, "demo");
     Expect(Same(persisted, await Snapshot(relogin)), "logout and re-login restore saved state without snapshot upload");
     await RunPostman(firstPort);
@@ -239,20 +239,20 @@ HttpClient Client(int port, string? token = null)
 async Task<HttpClient> Login(int port, string user)
 {
     using var client = Client(port);
-    using var response = await client.PostAsJsonAsync("/api/v1/auth/login", new LoginRequest(user, password), ContractJson.Options);
+    using var response = await client.PostAsJsonAsync("/api/auth/login", new LoginRequest(user, password), ContractJson.Options);
     if (response.StatusCode != HttpStatusCode.OK) throw new InvalidOperationException($"Login failed: {response.StatusCode}");
     var result = await response.Content.ReadFromJsonAsync<LoginResponse>(ContractJson.Options);
     return Client(port, result!.Token);
 }
 async Task<InventorySnapshot> Snapshot(HttpClient client)
-    => (await client.GetFromJsonAsync<InventorySnapshot>("/api/v1/inventory", ContractJson.Options))!;
+    => (await client.GetFromJsonAsync<InventorySnapshot>("/api/inventory", ContractJson.Options))!;
 InventoryCommand Command(InventorySnapshot snapshot, Guid id, InventoryLocation destination,
     OperationKind operation = OperationKind.Move, Guid? target = null, int? quantity = null)
     => new(Guid.NewGuid(), operation, id, snapshot.Items.Single(i => i.ItemId == id).Location,
         destination, [new(InventoryViews.Scope, snapshot.Revision)], snapshot.DefinitionVersion, target, quantity);
 async Task<OperationResponse> Execute(HttpClient client, InventoryCommand command, int expectedStatus, string? error = null)
 {
-    using var response = await client.PostAsJsonAsync("/api/v1/inventory/operations", command, ContractJson.Options);
+    using var response = await client.PostAsJsonAsync("/api/inventory/operations", command, ContractJson.Options);
     string body = await response.Content.ReadAsStringAsync();
     if ((int)response.StatusCode != expectedStatus) throw new InvalidOperationException($"{command.Operation}: expected {expectedStatus}, got {(int)response.StatusCode}: {body}");
     var result = JsonSerializer.Deserialize<OperationResult>(body, ContractJson.Options)!;

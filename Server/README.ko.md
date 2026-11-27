@@ -18,22 +18,22 @@ UE를 실행하지 않고 로그인 → 창고 조회 → 이동/장착 → 즉�
 .\Server\Start-Server.ps1
 ```
 
-기본 주소는 `http://127.0.0.1:5099`, 준비 확인은 `/health/ready`, OpenAPI는 `/openapi/v1.json`이다. 시작 스크립트는 설치된 .NET 10 또는 UE 5.8에 포함된 .NET 10 SDK를 선택한다. 다른 위치라면 `-DotNetPath 'C:\...\dotnet.exe'`를 지정한다. 다른 개발 DB는 `-ConnectionString` 또는 `ConnectionStrings__Inventory` 환경 변수로 지정한다. 비밀번호가 있는 연결 문자열은 명령 기록에 남기지 말고 환경 설정을 사용한다.
+기본 주소는 `http://127.0.0.1:5099`, 준비 확인은 `/health/ready`, OpenAPI는 `/openapi.json`이다. 시작 스크립트는 설치된 .NET 10 또는 UE 5.8에 포함된 .NET 10 SDK를 선택한다. 다른 위치라면 `-DotNetPath 'C:\...\dotnet.exe'`를 지정한다. 다른 개발 DB는 `-ConnectionString` 또는 `ConnectionStrings__Inventory` 환경 변수로 지정한다. 비밀번호가 있는 연결 문자열은 명령 기록에 남기지 말고 환경 설정을 사용한다.
 
 `Start-Server.ps1`은 로컬 개발 모드로 실행한다. 개발 모드는 EF Migration을 적용하며, demo seed는 명시적으로 요청했을 때만 수행한다. 생산 환경에서의 HTTPS·계정 발급·세션 공유·DB 배포 구성은 아직 제공하지 않는다.
 
 ## API
 
-매칭 시작·취소와 기능 클라이언트 노드 연결은 [Matching.ko.md](Matching.ko.md)를 참조한다. 예약 API는 `/api/v1/raids/*`에 추가됐으며 API 계약 버전은 1.1.0이다.
+매칭 시작·취소와 기능 클라이언트 노드 연결은 [Matching.ko.md](Matching.ko.md)를 참조한다. 예약 API는 `/api/raids/*`에 추가됐으며 현재 계약 버전은 1.3.0이다. 기본 주소는 `http://127.0.0.1:5099/api`로 고정한다. 공개 OpenAPI 주소는 `/openapi.json`이며 코드/계약 버전은 URL에 넣지 않는다.
 
 | 메서드 | 경로 | 용도 |
 | --- | --- | --- |
-| POST | `/api/v1/auth/login` | `{userId,password}` → playerId, token, expiresAt |
-| POST | `/api/v1/auth/logout` | 현재 토큰만 폐기; 저장 스냅샷 업로드 없음 |
-| GET | `/api/v1/definitions` | 서버 정의와 definitionVersion |
-| GET | `/api/v1/inventory` | 본인 Snapshot, 문자열 Revision |
-| POST | `/api/v1/inventory/operations` | Move/Rotate/Equip/Unequip/Swap/Merge/Split |
-| GET | `/api/v1/inventory/operations/{requestId}` | 원래 HTTP 상태를 포함한 저장 결과 조회 |
+| POST | `/api/auth/login` | `{userId,password}` → playerId, token, expiresAt |
+| POST | `/api/auth/logout` | 현재 토큰만 폐기; 저장 스냅샷 업로드 없음 |
+| GET | `/api/definitions` | 서버 정의와 definitionVersion |
+| GET | `/api/inventory` | 본인 Snapshot, 문자열 Revision |
+| POST | `/api/inventory/operations` | Move/Rotate/Equip/Unequip/Swap/Merge/Split |
+| GET | `/api/inventory/operations/{requestId}` | 원래 HTTP 상태를 포함한 저장 결과 조회 |
 
 로그인 이후에는 `Authorization: Bearer <token>`을 보낸다. 토큰은 메모리에 해시로 보관하며 최대 8시간 유효하다. API 재시작 시 세션만 만료되고 데이터·요청 결과는 유지된다. 여러 API 프로세스의 메모리 세션은 공유되지 않는다. 현재 실행 구성은 단일 API 프로세스다.
 
@@ -81,7 +81,7 @@ python .\Server\tools\build_contract.py
 
 ## 플레이어 데이터 조회
 
-`GET /api/v1/players/me`에 로그인 응답의 Bearer token을 보내면 본인 데이터를 묶어서 반환한다. 기존 로그인/인벤토리 API 응답은 유지한다.
+`GET /api/players/me`에 로그인 응답의 Bearer token을 보내면 본인 데이터를 묶어서 반환한다. 기존 로그인/인벤토리 API 응답은 유지한다.
 
 - `profile`: PlayerId, 닉네임, 레벨, 경험치(비음수 int64 문자열), 아바타/독택 이미지 ID. 이미지 ID가 null이면 기본 이미지를 사용한다. 이미지 바이너리는 저장하지 않는다.
 - `blackSite`: 창고·지휘본부·훈련장·사격장·다이빙센터·수집실·제독실 레벨.

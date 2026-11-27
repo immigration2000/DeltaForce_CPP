@@ -69,8 +69,8 @@ app.MapGet("/health/ready", async (InventoryDbContext db, CancellationToken ct) 
     await db.Players.AsNoTracking().Select(p => p.PlayerId).Take(1).ToListAsync(ct);
     return Results.Ok(new { status = "Ready", database = "MSSQL" });
 });
-app.MapGet("/openapi/v1.json", () => Results.File(Path.Combine(AppContext.BaseDirectory, "Contracts", "backend.v1.json"), "application/json"));
-var api = app.MapGroup("/api/v1");
+app.MapGet("/openapi.json", () => Results.File(Path.Combine(AppContext.BaseDirectory, "Contracts", "backend.v1.json"), "application/json"));
+var api = app.MapGroup("/api");
 api.MapRaidReservations();
 api.MapGet("/players/me", async (HttpContext context, IPlayerDataService players, SessionStore sessions, CancellationToken ct) =>
 {

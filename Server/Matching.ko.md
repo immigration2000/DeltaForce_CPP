@@ -37,11 +37,11 @@ UFUNCTION/USTRUCT가 추가됐으므로 에디터를 재시작한 뒤 새 노드
 
 | 메서드 | 경로 | 입력/결과 |
 | --- | --- | --- |
-| POST | `/api/v1/raids/reservations` | `{requestId,mapId}` → 201 Reserved |
-| GET | `/api/v1/raids/current-entry` | 본인 활성 예약 또는 404 EntryNotFound |
-| GET | `/api/v1/raids/{raidId}/entry` | 본인 해당 예약의 현재 상태 |
-| POST | `/api/v1/raids/{raidId}/entry/cancel` | `{requestId,entryId}` → 200 Cancelled |
-| GET | `/api/v1/raids/requests/{requestId}` | 저장된 결과와 원래 HTTP 상태 재생 |
+| POST | `/api/raids/reservations` | `{requestId,mapId}` → 201 Reserved |
+| GET | `/api/raids/current-entry` | 본인 활성 예약 또는 404 EntryNotFound |
+| GET | `/api/raids/{raidId}/entry` | 본인 해당 예약의 현재 상태 |
+| POST | `/api/raids/{raidId}/entry/cancel` | `{requestId,entryId}` → 200 Cancelled |
+| GET | `/api/raids/requests/{requestId}` | 저장된 결과와 원래 HTTP 상태 재생 |
 
 모든 경로는 Bearer 세션 인증이 필요하다. 플레이어당 활성 예약은 하나다. 같은 키/같은 payload는 최초 결과를 재생하고 다른 payload는 409 RequestPayloadMismatch다. 다른 키로 활성 예약을 중복 생성하면 409 AlreadyMatching이다. 과거 취소 요청이 새 예약을 취소하지 않도록 RaidId+EntryId+계정으로 대상을 고정한다.
 
@@ -61,4 +61,4 @@ Background는 창을 띄우지 않고 실행하며 로그는 `Server/artifacts/s
 
 검증 명령은 `.\Server\Test-Server.ps1`이다. 실제 MSSQL에서 중복/경쟁/타인 접근/과거 취소/예약·취소 rollback/서버 재시작 복구와 기존 인벤토리 회귀를 실행한다.
 
-UE 에디터 콘솔의 자동화 테스트는 `Automation RunTests GridInventory.Network`다. 실행 인자에 `-MatchingTestBaseUrl=http://127.0.0.1:5099/api/v1`을 추가하면 `MatchingLive`가 실제 demo/1234로 로그인 → 시작 직후 취소 → 재시작 → 조회 → 취소 → 로그아웃을 검증한다. 실행 전에 demo 계정에 사용 중인 매칭 예약이 없어야 한다.
+UE 에디터 콘솔의 자동화 테스트는 `Automation RunTests GridInventory.Network`다. 실행 인자에 `-MatchingTestBaseUrl=http://127.0.0.1:5099/api`을 추가하면 `MatchingLive`가 실제 demo/1234로 로그인 → 시작 직후 취소 → 재시작 → 조회 → 취소 → 로그아웃을 검증한다. 실행 전에 demo 계정에 사용 중인 매칭 예약이 없어야 한다.

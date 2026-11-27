@@ -74,7 +74,7 @@
 
 ## 플레이어 데이터 추가 완료
 
-- API v1.2.0 `GET /api/v1/players/me`: profile / blackSite / crafting / inventory / runtime. 모든 조회는 인증된 본인 계정으로 제한한다.
+- API v1.2.0 `GET /api/players/me`: profile / blackSite / crafting / inventory / runtime. 모든 조회는 인증된 본인 계정으로 제한한다.
 - Players에 Nickname, Level, Experience, AvatarId, DogtagImageId 추가. BlackSites(시설 7종), CraftingJobs(제작 시각·상태·수령 기록), PlayerRuntime(현재 파티/레이드 참조) 테이블 추가.
 - Migration `20261127074322_PlayerData`는 기존 UserId를 닉네임으로 채우고 기존 메인 창고 레벨을 보존하여 새 시설/런타임 행을 만든다. 새 demo 계정에도 해당 행을 생성한다. 기존 계정 재시드 시 프로필·시설·제작·인벤토리를 초기화하지 않는다.
 - 경험치는 int64 문자열. 아바타/독택은 이미지 자체가 아닌 nullable ID. 새 계정의 진행도는 0, 파티/레이드 참조는 null. 로그인 bool을 영구 저장하지 않고 요청 토큰의 유효성과 세션 시각을 반환한다.
@@ -84,6 +84,14 @@
 - Release 전체 빌드 경고/오류 0. 도메인 10개, 실제 MSSQL/HTTP 151개, Postman 11요청/14assertion 통과. 구 스키마 계정 이관, 타인 데이터 격리, int64 경험치, 제작 완료 시각, SQL 제약, 서버 재시작/비밀번호 재시드 보존 검증. 모델 pending 없음, OpenAPI syntax lint 문제 없음. Postman CLI는 status 명령을 지원하지 않으며 로컬 실행은 로그인 없이 통과했다.
 - 다음: 기능 클라이언트에서 players/me를 호출하여 FPlayerData에 PlayerId·닉네임·레벨·시설 등을 반영하고, 기존 창고 초기화가 시설 기본값으로 서버 컨테이너 레벨을 덮어쓰지 않도록 정리한다. 이번 작업은 C# 백엔드만 수정하여 UE 솔루션 재생성/빌드를 요구하지 않는다.
 - 실제 개발 DB에도 migration을 적용하고 5099 API를 재시작했다. demo/1234로 players/me 조회와 OpenAPI 1.2.0을 확인했다. 적용 전후 인벤토리 전체 JSON이 동일하고 revision=1, 아이템 7개를 보존했다. 토큰 없는 실제 응답 예시는 gitignore 대상 Server/artifacts/player-data.sample.json에 있다. 재시작으로 기존 세션은 만료되므로 클라이언트에서 다시 로그인한다.
+
+## URL 버전 구간 제거 — 한도 초기화 대기 지점
+
+- 사용자 요청으로 기본 주소를 `http://127.0.0.1:5099/api`로 고정했다. 공개 OpenAPI는 `/openapi.json`, metadata 버전은 1.3.0이다. 기존 응답/DB는 유지하고 서버·테스트·문서·기능 클라이언트 설정과 URL 판별 코드를 함께 변경했다.
+- 서버는 새 주소로 5099에서 실행 중이다. 새 주소 로그인·players/me·인벤토리 보존을 실제 개발 DB에서 확인했다. Release 서버 회귀: 도메인 10, SQL/HTTP 151, Postman 14 통과. OpenAPI syntax lint 통과.
+- UE Editor 빌드 suffix 4661 통과. 기능 클라이언트의 BaseUrl은 /api이며 UsesBackendApi로 판별한다. 파일 추가/삭제는 없어서 IDE 프로젝트 재생성 대상이 아니다. 실행 중인 에디터는 재시작해야 새 DLL/설정이 적용된다.
+- 주간 사용률 100%에 도달하여 사용자 지시대로 중단했다. 새 주소를 쓰는 UE 실제 HTTP 자동화 검사는 아직 실행하지 않았다. 다음은 UnrealEditor-Cmd로 `Automation RunTests GridInventory.Network`, `-MatchingTestBaseUrl=http://127.0.0.1:5099/api`, `-NoSaveConfig -NullRHI -unattended`를 실행하고 로그인/매칭 5개를 확인하는 것이다.
+- URL 변경은 아직 미커밋이다. 서버 HEAD는 09e91b1, 현재 변경은 작업 트리에 보존했다. 기능 클라이언트는 사용자 Blueprint/소스 변경이 섞여 있으므로 일괄 커밋/초기화하지 않는다. 서버/클라이언트 AGENTS.md에 URL 고정 규칙을 기록했다.
 
 ## 기획 기준
 

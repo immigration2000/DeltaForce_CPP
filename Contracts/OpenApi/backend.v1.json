@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "DeltaForce Backend",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "description": "M1 authoritative lobby backend. Contracts/README.md contains integration rules and boundaries."
   },
   "servers": [
@@ -84,7 +84,7 @@
         }
       }
     },
-    "/api/v1/auth/login": {
+    "/api/auth/login": {
       "post": {
         "operationId": "login",
         "security": [],
@@ -145,7 +145,7 @@
         }
       }
     },
-    "/api/v1/auth/logout": {
+    "/api/auth/logout": {
       "post": {
         "operationId": "logout",
         "description": "Invalidate only this token. Inventory changes are already durable; no snapshot is uploaded.",
@@ -166,7 +166,7 @@
         }
       }
     },
-    "/api/v1/definitions": {
+    "/api/definitions": {
       "get": {
         "operationId": "definitions",
         "responses": {
@@ -193,7 +193,7 @@
         }
       }
     },
-    "/api/v1/inventory": {
+    "/api/inventory": {
       "get": {
         "operationId": "inventory",
         "responses": {
@@ -240,7 +240,7 @@
         }
       }
     },
-    "/api/v1/inventory/operations": {
+    "/api/inventory/operations": {
       "post": {
         "operationId": "executeInventoryOperation",
         "description": "Exactly one durable result per player+requestId. Same canonical payload returns the stored result BEFORE revision validation. A different payload is 409. Successful state changes, revision and result commit together. Records have no TTL in M1. Swap exchanges full locations. Merge uses targetItemId and optional quantity (default all). Split requires quantity and returns a server-generated GUID. updatedItems are full upserts. Apply a delta only at its baseRevision; otherwise reload the snapshot.",
@@ -338,7 +338,7 @@
         }
       }
     },
-    "/api/v1/inventory/operations/{requestId}": {
+    "/api/inventory/operations/{requestId}": {
       "get": {
         "operationId": "inventoryOperationResult",
         "parameters": [
@@ -472,7 +472,7 @@
         }
       }
     },
-    "/api/v1/raids/reservations": {
+    "/api/raids/reservations": {
       "post": {
         "operationId": "reserveRaid",
         "description": "Create one durable Reserved entry per player. This is matchmaking acceptance, not a ready dedicated server. No inventory lock or revision change occurs until the future entry commit stage. Reuse the same requestId after timeout. Replays return the original historical result; query current-entry for current state.",
@@ -550,7 +550,7 @@
         }
       }
     },
-    "/api/v1/raids/current-entry": {
+    "/api/raids/current-entry": {
       "get": {
         "operationId": "currentRaidEntry",
         "responses": {
@@ -617,7 +617,7 @@
         }
       }
     },
-    "/api/v1/raids/{raidId}/entry": {
+    "/api/raids/{raidId}/entry": {
       "get": {
         "operationId": "raidEntry",
         "parameters": [
@@ -695,7 +695,7 @@
         }
       }
     },
-    "/api/v1/raids/{raidId}/entry/cancel": {
+    "/api/raids/{raidId}/entry/cancel": {
       "post": {
         "operationId": "cancelRaidEntry",
         "description": "Cancel only the authenticated player's specified Reserved entry. Same-key retries replay; cancelling an already Cancelled entry also succeeds. Does not touch another/newer reservation.",
@@ -784,7 +784,7 @@
         }
       }
     },
-    "/api/v1/raids/requests/{requestId}": {
+    "/api/raids/requests/{requestId}": {
       "get": {
         "operationId": "raidRequestResult",
         "description": "Replay the original response/status for this player+requestId. A 404 RequestNotRecorded does not prove an in-flight request failed.",
@@ -873,7 +873,7 @@
         }
       }
     },
-    "/api/v1/players/me": {
+    "/api/players/me": {
       "get": {
         "operationId": "currentPlayerData",
         "description": "Authenticated own-player aggregate. Persisted sections use the inventory/matching player lock. Experience/revisions are decimal strings. Crafting contains only active/unclaimed jobs; ReadyToClaim is calculated from server UTC without granting items. Login describes this token, not online presence. Party and raid assignment are reserved for future trusted server workflows; a Reserved matching entry is not an active raid. Read-only: there is no client snapshot/progression overwrite endpoint.",

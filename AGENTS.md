@@ -1,5 +1,11 @@
 # Unreal IDE 프로젝트 갱신
 
+## 백엔드 주소
+
+- 기능 클라이언트의 기본 BaseUrl은 `http://127.0.0.1:5099/api`다. 사용자는 URL의 버전 구간을 제거하고 고정 주소를 원한다.
+- 서버 기능 추가나 코드/계약 버전 변경 때문에 BaseUrl을 변경하지 않는다. 버전은 Git·OpenAPI metadata·schemaVersion으로 관리한다.
+- 인증·인벤토리·매칭의 기존 요청/응답 호환성을 유지한다. 새 기능은 고정 BaseUrl 아래 경로로 추가한다.
+
 - 사용자는 새 C++ 파일이 IDE에 보이지 않는 문제를 직접 .sln 재생성으로 해결했다. 앞으로 에이전트가 IDE 갱신까지 처리한다.
 - Unreal C++ 헤더/소스 파일을 추가·삭제·이름 변경·이동했으면 완료 보고 전에 해당 .uproject의 IDE 프로젝트 파일을 재생성한다. 빌드 통과만으로 IDE 반영 완료라고 판단하지 않는다.
 - 설치된 엔진의 Build.bat 또는 UnrealBuildTool의 `-Mode=GenerateProjectFiles`를 사용한다. 프로젝트 절대 경로, `-Game -Engine -Automated`를 지정하고 기존 IDE 형식을 유지한다. GenerateProjectFiles.bat이 없는 설치형 엔진은 UnrealBuildTool 경로를 사용한다.

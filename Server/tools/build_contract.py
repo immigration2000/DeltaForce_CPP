@@ -61,19 +61,19 @@ errors = {"400": response(ref("ApiError"), "Malformed request; a transport-level
 paths = {
     "/health/live": {"get": {"operationId": "liveness", "security": [], "responses": {"200": response(obj({"status": string}), "Process is alive")}}},
     "/health/ready": {"get": {"operationId": "readiness", "security": [], "responses": {"200": response(obj({"status": string, "database": string}), "MSSQL query succeeded"), "503": errors["503"]}}},
-    "/api/v1/auth/login": {"post": {"operationId": "login", "security": [], "requestBody": {"required": True, "content": {"application/json": {"schema": ref("LoginRequest")}}},
+    "/api/auth/login": {"post": {"operationId": "login", "security": [], "requestBody": {"required": True, "content": {"application/json": {"schema": ref("LoginRequest")}}},
         "responses": {"200": response(ref("LoginResponse"), "New process-local session, 8-hour maximum lifetime"), "400": errors["400"], "401": errors["401"], "429": {"description": "20 attempts/minute/IP"}, "503": errors["503"]}}},
-    "/api/v1/auth/logout": {"post": {"operationId": "logout", "description": "Invalidate only this token. Inventory changes are already durable; no snapshot is uploaded.",
+    "/api/auth/logout": {"post": {"operationId": "logout", "description": "Invalidate only this token. Inventory changes are already durable; no snapshot is uploaded.",
         "responses": {"204": {"description": "Token revoked"}, "401": errors["401"]}}},
-    "/api/v1/definitions": {"get": {"operationId": "definitions", "responses": {"200": response(ref("Definitions"), "Server-authoritative immutable manifest and SHA-256 version"), "401": errors["401"]}}},
-    "/api/v1/inventory": {"get": {"operationId": "inventory", "responses": {"200": response(ref("Snapshot"), "Consistent own-player snapshot"), "401": errors["401"], "404": response(ref("ApiError"), "Player not found"), "503": errors["503"]}}},
-    "/api/v1/inventory/operations": {"post": {"operationId": "executeInventoryOperation",
+    "/api/definitions": {"get": {"operationId": "definitions", "responses": {"200": response(ref("Definitions"), "Server-authoritative immutable manifest and SHA-256 version"), "401": errors["401"]}}},
+    "/api/inventory": {"get": {"operationId": "inventory", "responses": {"200": response(ref("Snapshot"), "Consistent own-player snapshot"), "401": errors["401"], "404": response(ref("ApiError"), "Player not found"), "503": errors["503"]}}},
+    "/api/inventory/operations": {"post": {"operationId": "executeInventoryOperation",
         "description": "Exactly one durable result per player+requestId. Same canonical payload returns the stored result BEFORE revision validation. A different payload is 409. Successful state changes, revision and result commit together. Records have no TTL in M1. Swap exchanges full locations. Merge uses targetItemId and optional quantity (default all). Split requires quantity and returns a server-generated GUID. updatedItems are full upserts. Apply a delta only at its baseRevision; otherwise reload the snapshot.",
         "requestBody": {"required": True, "content": {"application/json": {"schema": ref("InventoryCommand")}}},
         "responses": {"200": response(ref("OperationResult"), "Applied, or exact replay"),
             **{str(code): response(ref("OperationResult"), desc) for code, desc in [(400, "Invalid intent/location"), (403, "Container inaccessible"), (404, "Item/container not found in this account"), (409, "Revision/source/definition/payload mismatch"), (422, "Collision, category, boundary, stack or containment rule rejection")]},
             "401": errors["401"], "503": errors["503"]}}},
-    "/api/v1/inventory/operations/{requestId}": {"get": {"operationId": "inventoryOperationResult",
+    "/api/inventory/operations/{requestId}": {"get": {"operationId": "inventoryOperationResult",
         "parameters": [{"name": "requestId", "in": "path", "required": True, "schema": guid}],
         "description": "Returns the stored result with its original HTTP status. Not recorded does not prove an in-flight request failed.",
         "responses": {"200": response(ref("OperationResult"), "Stored success"),
@@ -87,18 +87,18 @@ schemas["RaidReservation"] = obj({"raidId": guid, "entryId": guid, "mapId": stri
 raid_responses = {"200": response(ref("RaidReservation"), "Current reservation or stored result"),
     "400": errors["400"], "401": errors["401"], "404": response(ref("ApiError"), "Entry/result not found for this player"),
     "409": response(ref("ApiError"), "AlreadyMatching, RequestPayloadMismatch or EntryNotCancelable"), "503": errors["503"]}
-paths["/api/v1/raids/reservations"] = {"post": {"operationId": "reserveRaid",
+paths["/api/raids/reservations"] = {"post": {"operationId": "reserveRaid",
     "description": "Create one durable Reserved entry per player. This is matchmaking acceptance, not a ready dedicated server. No inventory lock or revision change occurs until the future entry commit stage. Reuse the same requestId after timeout. Replays return the original historical result; query current-entry for current state.",
     "requestBody": {"required": True, "content": {"application/json": {"schema": ref("ReserveRaidRequest")}}},
     "responses": {**{k:v for k,v in raid_responses.items() if k != "200"}, "201": response(ref("RaidReservation"), "Reserved or exact replay")}}}
-paths["/api/v1/raids/current-entry"] = {"get": {"operationId": "currentRaidEntry", "responses": raid_responses}}
-paths["/api/v1/raids/{raidId}/entry"] = {"get": {"operationId": "raidEntry",
+paths["/api/raids/current-entry"] = {"get": {"operationId": "currentRaidEntry", "responses": raid_responses}}
+paths["/api/raids/{raidId}/entry"] = {"get": {"operationId": "raidEntry",
     "parameters": [{"name": "raidId", "in": "path", "required": True, "schema": guid}], "responses": raid_responses}}
-paths["/api/v1/raids/{raidId}/entry/cancel"] = {"post": {"operationId": "cancelRaidEntry",
+paths["/api/raids/{raidId}/entry/cancel"] = {"post": {"operationId": "cancelRaidEntry",
     "description": "Cancel only the authenticated player's specified Reserved entry. Same-key retries replay; cancelling an already Cancelled entry also succeeds. Does not touch another/newer reservation.",
     "parameters": [{"name": "raidId", "in": "path", "required": True, "schema": guid}],
     "requestBody": {"required": True, "content": {"application/json": {"schema": ref("CancelRaidRequest")}}}, "responses": raid_responses}}
-paths["/api/v1/raids/requests/{requestId}"] = {"get": {"operationId": "raidRequestResult",
+paths["/api/raids/requests/{requestId}"] = {"get": {"operationId": "raidRequestResult",
     "description": "Replay the original response/status for this player+requestId. A 404 RequestNotRecorded does not prove an in-flight request failed.",
     "parameters": [{"name": "requestId", "in": "path", "required": True, "schema": guid}],
     "responses": {**raid_responses, "201": response(ref("RaidReservation"), "Stored reservation result")}}}
@@ -119,11 +119,11 @@ schemas["PlayerRuntime"] = obj({"login": ref("LoginSession"), "currentPartyId": 
     "matching": ref("MatchingRuntime"), "raid": ref("RaidRuntime")})
 schemas["PlayerData"] = obj({"schemaVersion": {**integer, "enum": [1]}, "profile": ref("PlayerProfile"),
     "blackSite": ref("BlackSite"), "crafting": array(ref("CraftingJob")), "inventory": ref("Snapshot"), "runtime": ref("PlayerRuntime")})
-paths["/api/v1/players/me"] = {"get": {"operationId": "currentPlayerData",
+paths["/api/players/me"] = {"get": {"operationId": "currentPlayerData",
     "description": "Authenticated own-player aggregate. Persisted sections use the inventory/matching player lock. Experience/revisions are decimal strings. Crafting contains only active/unclaimed jobs; ReadyToClaim is calculated from server UTC without granting items. Login describes this token, not online presence. Party and raid assignment are reserved for future trusted server workflows; a Reserved matching entry is not an active raid. Read-only: there is no client snapshot/progression overwrite endpoint.",
     "responses": {"200": response(ref("PlayerData"), "Own player data, no password/token hashes or raw auth token"),
         "401": errors["401"], "404": response(ref("ApiError"), "Player not found"), "503": errors["503"]}}}
-spec = {"openapi": "3.0.3", "info": {"title": "DeltaForce Backend", "version": "1.2.0",
+spec = {"openapi": "3.0.3", "info": {"title": "DeltaForce Backend", "version": "1.3.0",
     "description": "M1 authoritative lobby backend. Contracts/README.md contains integration rules and boundaries."},
     "servers": [{"url": "http://127.0.0.1:5099"}], "security": [{"Session": []}], "paths": paths,
     "components": {"securitySchemes": {"Session": {"type": "http", "scheme": "bearer", "description": "Opaque login session; not JWT. Lost on API restart; never put in a Travel URL."}}, "schemas": schemas}}
@@ -142,19 +142,19 @@ collection = {
              "description": "Local runnable checks derived from backend.v1.json. Requires baseUrl/userId/password environment values. Run with --no-report-events."},
     "item": [
         request("Ready", "GET", "/health/ready", ['pm.test("MSSQL ready", () => { pm.response.to.have.status(200); pm.expect(pm.response.json().database).to.eql("MSSQL"); });']),
-        request("Login", "POST", "/api/v1/auth/login", ['pm.test("login success", () => pm.response.to.have.status(200));',
+        request("Login", "POST", "/api/auth/login", ['pm.test("login success", () => pm.response.to.have.status(200));',
             'pm.test("opaque session", () => pm.expect(pm.response.json().token).to.match(/^[a-f0-9]{64}$/));',
             'pm.collectionVariables.set("token", pm.response.json().token);'], {"userId": "{{userId}}", "password": "{{password}}"}),
-        request("Inventory", "GET", "/api/v1/inventory", ['pm.test("snapshot success", () => pm.response.to.have.status(200));',
+        request("Inventory", "GET", "/api/inventory", ['pm.test("snapshot success", () => pm.response.to.have.status(200));',
             'pm.test("versioned authoritative snapshot", () => { const b=pm.response.json(); pm.expect(b.revision).to.match(/^[1-9][0-9]*$/); pm.expect(b.definitionVersion).to.match(/^sha256:[a-f0-9]{64}$/); pm.expect(b.inventoryScope).to.eql("persistent:self"); });'], auth=True),
-        request("Own player data", "GET", "/api/v1/players/me", [
+        request("Own player data", "GET", "/api/players/me", [
             'pm.test("own player aggregate", () => { pm.response.to.have.status(200); const b=pm.response.json(); pm.expect(b.schemaVersion).to.eql(1); pm.expect(b.profile.playerId).to.match(/^[a-f0-9-]{36}$/); pm.expect(b.profile.experience).to.match(/^(0|[1-9][0-9]*)$/); pm.expect(b.blackSite).to.have.property("stashLevel"); pm.expect(b.inventory.inventoryScope).to.eql("persistent:self"); pm.expect(b.runtime.login.isLoggedIn).to.eql(true); });',
             'pm.test("no credentials in player data", () => { const text=pm.response.text(); pm.expect(text).not.to.include("passwordHash"); pm.expect(text).not.to.include("\\\"token\\\""); });'], auth=True),
-        request("Anonymous denied", "GET", "/api/v1/inventory", ['pm.test("no anonymous inventory", () => pm.response.to.have.status(401));']),
-        request("Logout", "POST", "/api/v1/auth/logout", ['pm.test("session revoked", () => pm.response.to.have.status(204));'], auth=True),
-        request("Revoked token denied", "GET", "/api/v1/inventory", ['pm.test("revoked token rejected", () => pm.response.to.have.status(401));'], auth=True),
+        request("Anonymous denied", "GET", "/api/inventory", ['pm.test("no anonymous inventory", () => pm.response.to.have.status(401));']),
+        request("Logout", "POST", "/api/auth/logout", ['pm.test("session revoked", () => pm.response.to.have.status(204));'], auth=True),
+        request("Revoked token denied", "GET", "/api/inventory", ['pm.test("revoked token rejected", () => pm.response.to.have.status(401));'], auth=True),
     ]}
-reserve_check = request("Reserve raid", "POST", "/api/v1/raids/reservations", [
+reserve_check = request("Reserve raid", "POST", "/api/raids/reservations", [
     'pm.test("reservation accepted", () => { pm.response.to.have.status(201); pm.expect(pm.response.json().status).to.eql("Reserved"); });',
     'pm.collectionVariables.set("raidId", pm.response.json().raidId); pm.collectionVariables.set("entryId", pm.response.json().entryId);'],
     {"requestId": "{{matchRequestId}}", "mapId": "beacon"}, auth=True)
@@ -162,12 +162,12 @@ reserve_check["event"].insert(0, {"listen": "prerequest", "script": {"type": "te
     'pm.collectionVariables.set("matchRequestId", pm.variables.replaceIn("{{$guid}}"));',
     'pm.collectionVariables.set("cancelRequestId", pm.variables.replaceIn("{{$guid}}"));']}})
 collection["item"][3:3] = [reserve_check,
-    request("Current raid entry", "GET", "/api/v1/raids/current-entry", [
+    request("Current raid entry", "GET", "/api/raids/current-entry", [
         'pm.test("own reservation recovered", () => { pm.response.to.have.status(200); pm.expect(pm.response.json().entryId).to.eql(pm.collectionVariables.get("entryId")); });'], auth=True),
-    request("Cancel raid", "POST", "/api/v1/raids/{{raidId}}/entry/cancel", [
+    request("Cancel raid", "POST", "/api/raids/{{raidId}}/entry/cancel", [
         'pm.test("reservation cancelled", () => { pm.response.to.have.status(200); pm.expect(pm.response.json().status).to.eql("Cancelled"); });'],
         {"requestId": "{{cancelRequestId}}", "entryId": "{{entryId}}"}, auth=True),
-    request("Cancelled entry not active", "GET", "/api/v1/raids/current-entry", [
+    request("Cancelled entry not active", "GET", "/api/raids/current-entry", [
         'pm.test("no active reservation after cancellation", () => pm.response.to.have.status(404));'], auth=True)]
 output = root / "Contracts/Postman/lobby.postman_collection.json"
 output.parent.mkdir(parents=True, exist_ok=True)

@@ -36,7 +36,7 @@ internal static class PlayerDataChecks
                 "player migration backfills facility levels and runtime for old accounts");
         }
         using var anonymous = new HttpClient { BaseAddress = a.BaseAddress };
-        expect((int)(await anonymous.GetAsync("/api/v1/players/me")).StatusCode == 401, "anonymous player aggregate denied");
+        expect((int)(await anonymous.GetAsync("/api/players/me")).StatusCode == 401, "anonymous player aggregate denied");
         var initial = await Get(a);
         var other = await Get(b);
         expect(initial.SchemaVersion == 1 && initial.Profile.Nickname == "demo" && initial.Profile.Level == 0
@@ -48,15 +48,15 @@ internal static class PlayerDataChecks
         expect(initial.Runtime.Matching.Status == PlayerMatchingStatus.Idle && initial.Runtime.Matching.Reservation == null
             && initial.Runtime.CurrentPartyId == null && initial.Runtime.Raid == new RaidRuntimeView(PlayerRaidStatus.None, null),
             "new runtime has no fabricated party, reservation or raid");
-        var inventory = await a.GetFromJsonAsync<InventorySnapshot>("/api/v1/inventory", ContractJson.Options);
+        var inventory = await a.GetFromJsonAsync<InventorySnapshot>("/api/inventory", ContractJson.Options);
         expect(Same(initial.Inventory, inventory!), "player aggregate reuses exact authoritative inventory and loadout");
-        string body = await a.GetStringAsync("/api/v1/players/me");
+        string body = await a.GetStringAsync("/api/players/me");
         expect(!body.Contains("password", StringComparison.OrdinalIgnoreCase) && !body.Contains("\"token\"", StringComparison.OrdinalIgnoreCase),
             "player response never exposes credentials or token material");
-        expect((await a.GetAsync("/api/v1/players/me")).Headers.CacheControl?.NoStore == true, "private player response disables caching");
-        expect((await a.GetFromJsonAsync<PlayerDataSnapshot>($"/api/v1/players/me?playerId={other.Profile.PlayerId:D}", ContractJson.Options))!
+        expect((await a.GetAsync("/api/players/me")).Headers.CacheControl?.NoStore == true, "private player response disables caching");
+        expect((await a.GetFromJsonAsync<PlayerDataSnapshot>($"/api/players/me?playerId={other.Profile.PlayerId:D}", ContractJson.Options))!
             .Profile.PlayerId == initial.Profile.PlayerId, "caller cannot override aggregate ownership");
-        expect((int)(await a.PutAsJsonAsync("/api/v1/players/me", new { level = 9999 })).StatusCode == 405,
+        expect((int)(await a.PutAsJsonAsync("/api/players/me", new { level = 9999 })).StatusCode == 405,
             "client cannot overwrite progression through player snapshot");
 
         Guid pending = Guid.NewGuid(), ready = Guid.NewGuid(), claimed = Guid.NewGuid(), foreign = Guid.NewGuid();
@@ -88,13 +88,13 @@ internal static class PlayerDataChecks
                 "crafting display readiness has no persistence side effects");
         await RejectSql($"UPDATE [Players] SET [Level] = -1 WHERE [PlayerId] = '{initial.Profile.PlayerId:D}'");
         await RejectSql($"UPDATE [PlayerRuntime] SET [RaidId] = '{Guid.NewGuid():D}' WHERE [PlayerId] = '{initial.Profile.PlayerId:D}'");
-        var reserve = await a.PostAsJsonAsync("/api/v1/raids/reservations", new ReserveRaidRequest(Guid.NewGuid(), "beacon"), ContractJson.Options);
+        var reserve = await a.PostAsJsonAsync("/api/raids/reservations", new ReserveRaidRequest(Guid.NewGuid(), "beacon"), ContractJson.Options);
         var entry = (await reserve.Content.ReadFromJsonAsync<RaidReservation>(ContractJson.Options))!;
         var matching = await Get(a);
         expect((int)reserve.StatusCode == 201 && matching.Runtime.Matching.Status == PlayerMatchingStatus.Matching
             && matching.Runtime.Matching.Reservation?.EntryId == entry.EntryId && matching.Runtime.Raid.Status == PlayerRaidStatus.None,
             "reserved matchmaking appears in aggregate without inventing active raid state");
-        await a.PostAsJsonAsync($"/api/v1/raids/{entry.RaidId}/entry/cancel", new CancelRaidRequest(Guid.NewGuid(), entry.EntryId), ContractJson.Options);
+        await a.PostAsJsonAsync($"/api/raids/{entry.RaidId}/entry/cancel", new CancelRaidRequest(Guid.NewGuid(), entry.EntryId), ContractJson.Options);
         expect((await Get(a)).Runtime.Matching.Status == PlayerMatchingStatus.Idle, "aggregate reflects confirmed matching cancellation");
         return await Get(a);
 
@@ -117,6 +117,6 @@ internal static class PlayerDataChecks
 
     private static InventoryDbContext Open(string connection) => new(new DbContextOptionsBuilder<InventoryDbContext>().UseSqlServer(connection).Options);
     private static async Task<PlayerDataSnapshot> Get(HttpClient client)
-        => (await client.GetFromJsonAsync<PlayerDataSnapshot>("/api/v1/players/me", ContractJson.Options))!;
+        => (await client.GetFromJsonAsync<PlayerDataSnapshot>("/api/players/me", ContractJson.Options))!;
     private static bool Same<T>(T a, T b) => JsonSerializer.Serialize(a, ContractJson.Options) == JsonSerializer.Serialize(b, ContractJson.Options);
 }

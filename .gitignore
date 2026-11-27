@@ -95,3 +95,10 @@ Plugins/**/Binaries/*
 Plugins/**/Intermediate/*
 
 # End of https://www.toptal.com/developers/gitignore/api/unrealengine
+
+# Standalone .NET backend
+Server/**/bin/
+Server/**/obj/
+Server/artifacts/
+Server/**/appsettings.Local.json
+!Server/DeltaForce.Server.slnx

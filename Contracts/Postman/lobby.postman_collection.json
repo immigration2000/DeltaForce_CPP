@@ -1,0 +1,155 @@
+{
+  "info": {
+    "name": "DeltaForce lobby M1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Local runnable checks derived from backend.v1.json. Requires baseUrl/userId/password environment values. Run with --no-report-events."
+  },
+  "item": [
+    {
+      "name": "Ready",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/health/ready",
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"MSSQL ready\", () => { pm.response.to.have.status(200); pm.expect(pm.response.json().database).to.eql(\"MSSQL\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/v1/auth/login",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"userId\": \"{{userId}}\", \"password\": \"{{password}}\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"login success\", () => pm.response.to.have.status(200));",
+              "pm.test(\"opaque session\", () => pm.expect(pm.response.json().token).to.match(/^[a-f0-9]{64}$/));",
+              "pm.collectionVariables.set(\"token\", pm.response.json().token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inventory",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/inventory",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"snapshot success\", () => pm.response.to.have.status(200));",
+              "pm.test(\"versioned authoritative snapshot\", () => { const b=pm.response.json(); pm.expect(b.revision).to.match(/^[1-9][0-9]*$/); pm.expect(b.definitionVersion).to.match(/^sha256:[a-f0-9]{64}$/); pm.expect(b.inventoryScope).to.eql(\"persistent:self\"); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Anonymous denied",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/inventory",
+        "header": []
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"no anonymous inventory\", () => pm.response.to.have.status(401));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Logout",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/v1/auth/logout",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"session revoked\", () => pm.response.to.have.status(204));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Revoked token denied",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/inventory",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ]
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"revoked token rejected\", () => pm.response.to.have.status(401));"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
